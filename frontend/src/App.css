@@ -1,10 +1,191 @@
-.App {
+a:link, a:visited, a:active{
+  color: #C3A093;
+  font-family: 'Helvetica Neue, Helvetica, Arial', sans-serif;
+  font-size: 25px;
+  padding-right: 15px;
+  padding-left: 15px;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+body {
+  background-color: white;
+}
+
+h2 {
+  background-color: #708090;
+  border-radius: 10px;
+  color: white;
+  display: inline-block;
+  font-family: 'Helvetica Neue, Helvetica, Arial', sans-serif;
+  font-size: 30px;
+  font-weight: normal;
+  padding-top: 25px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  text-align: left;
+  width: 230px;
+}
+
+li {
+  display: inline;
   text-align: center;
 }
 
-.App-logo {
+.app {
+  text-align: center;
+}
+
+.appHeader {
+  background-color: #282c34;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: calc(10px + 2vmin);
+  min-height: 100vh;
+}
+
+.appLink {
+  color: #61dafb;
+}
+
+.appLogo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.home {
+
+}
+
+/* Center the avatar image inside this container */
+/*.imgContainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+}*/
+
+.image {
+  border: "2px dashed black";
+  height: "60px";
+  width: "60px";
+}
+
+.intro {
+  color: black;
+  font-family: 'Helvetica Neue, Helvetica, Arial', sans-serif;
+  font-size: 18px;
+  padding-top: 5px;
+  padding-right: 30px;
+  padding-bottom: 30px;
+  padding-left: 60px;
+}
+
+.login {
+  background-color: #708090;
+  color: white;
+  display: inline-block;
+  font-family: 'Helvetica Neue, Helvetica, Arial', sans-serif;
+  font-size: 40px;
+  font-style: light;
+  padding-top: 27px;
+  padding-right: 30px;
+  padding-left: 20px;
+  width: 400px;
+}
+
+.navigation {
+  background-color: #DCDCDC;
+  border-width: 0;
+  list-style: none;
+  margin-top: 13px;
+  margin-bottom: 13px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+.newSocialMedia {
+  background-color: #708090;
+  color: white;
+  font-family: 'Helvetica Neue, Helvetica, Arial', sans-serif;
+  font-size: 40px;
+  font-weight: bold;
+  padding-top: 45px;
+  padding-bottom: 45px;
+  padding-right: 30px;
+  padding-left: 60px;
+}
+
+.sameLineRight {
+  display: inline-block;
+  margin-right: 15%;
+  text-align: right;
+  width: 700px; 
+}
+
+.welcomeMessage {
+  color: black;
+  font-family: 'Helvetica Neue, Helvetica, Arial', sans-serif;
+  font-size: 40px;
+  text-align: center;
+}
+
+.wrapper {
+}
+
+/*input[type=text], select {
+  width: 40%;
+  font-size: 15px;
+  background-color: #DCDCDC;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 30%;
+  margin-right: 30%;
+  padding: 6px 6px;
+}
+
+input[type=submit] {
+  width: 40%;
+  font-size: 20px;
+  background-color: #708090;
+  color: white;
+  padding: 20px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  justify-content: center;
+}*/
+
+input[type=goToLogin] {
+  background-color: #DEB887;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  font-size: 20px;
+  justify-content: center;
+  margin: auto;
+  margin-top: 8px;
+  padding: 14px 20px;
+  text-align: center;
+  width: 35%;
+}
+
+label[for=email] {
+  color: white;
+  font-family: 'Helvetica Neue, Helvetica, Arial', sans-serif;
+  font-size: 20px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -13,20 +194,16 @@
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
+/* Change styles for span and cancel button on extra small screens */
+/*@media screen and (max-width: 300px) {
+  span.psw {
+    display: block;
+    float: none;
+  }
+  .cancelbtn {
+    width: 100%;
+  }
+}*/
 
 @keyframes App-logo-spin {
   from {
