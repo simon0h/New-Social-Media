@@ -1,29 +1,30 @@
-import React, {useState} from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import './Login.css';
+import './AccountManagement.css';
 
-async function createAccount(credentials) {
-  return (
-    <React.Fragment>
-      <div className="loginWrapper">
-        <h1>Create Account</h1>
-        <form onSubmit={handleSubmit}>
-          <label>
-            <p>Username</p>
-            <input type="text" onChange={e => setUserName(e.target.value)}/>
-          </label>
-          <label>
-            <p>Password</p>
-            <input type="password" onChange={e => setPassword(e.target.value)}/>
-          </label>
-          <div>
-            <button type="submit">Submit</button>
-          </div>
-        </form>
-      </div>
-    </React.Fragment>
-  );
+export default class CreateAccount extends Component {
+  render() {
+    return (
+      <React.Fragment>
+        <div className="accountWrapper">
+          <div className="login">Create Account</div>
+          <form>
+            <label>
+              <div className="prompt">Username</div>
+              <input type="text"/>
+              {/* <input type="text" onChange={e => setUserName(e.target.value)}/> */}
+            </label>
+            <label>
+              <div className="prompt">Password</div>
+              <input type="text"/>
+              {/* <input type="password" onChange={e => setPassword(e.target.value)}/> */}
+            </label>
+            <div>
+              <button type="submit">Submit</button>
+            </div>
+          </form>
+        </div>
+      </React.Fragment>
+    );
+  }
 }
-
-export default createAccount;

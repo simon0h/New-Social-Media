@@ -1,20 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
+import ReactSearchBox from 'react-search-box';
 import './App.css';
 
-function Search() {
-  return (
-    <React.Fragment>
-      <title>Search</title>
-      <h1>
-        Search 
-      </h1>
-      
-      <body className="intro">
-        <p> Loren ipsum </p>
-      </body>
-    </React.Fragment>
-  );
-}
+export default class Search extends Component {
+  data = [
+    {
+      key: 'john',
+      value: 'John Doe',
+    },
+    {
+      key: 'jane',
+      value: 'Jane Doe',
+    },
+    {
+      key: 'mary',
+      value: 'Mary Phillips',
+    },
+    {
+      key: 'robert',
+      value: 'Robert',
+    },
+    {
+      key: 'karius',
+      value: 'Karius',
+    },
+  ]
 
-export default Search;
+  render () {
+    return (
+      <React.Fragment>
+        <title>Search</title>
+        <h2>Search</h2>
+        <ReactSearchBox
+          placeholder="Placeholder"
+          value="Doe"
+          data={this.data}
+          callback={record => console.log(record)}
+        />
+      </React.Fragment>
+    );
+  }
+}
