@@ -1,9 +1,9 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
 function Feed() {
   const uploadedImage = React.useRef(null);
+  const imageUploader = React.useRef(null);
 
   const handleImageUpload = e => {
     const [file] = e.target.files;
@@ -17,27 +17,29 @@ function Feed() {
       reader.readAsDataURL(file);
     }
   };
+  //Backend: store images in the servers, send a GET request to images that the follower posted
 
   return (
     <React.Fragment>
       <title>Feed</title>
       <h2>Your Feed</h2>
-      <div className="Upload">
-        <input type="file" accept="image/*" onChange={handleImageUpload} multiple="false"/>
-        <div className ="image">
+      <div className="upload">
+        <input type="file" multiple accept="image/*" onChange={handleImageUpload} ref={imageUploader}
+          style={{display: "none"}}/>
+        <div className ="image" onClick={() => imageUploader.current.click()}>
           <img
             ref={uploadedImage}
             style={{
-              width: "35%",
+              border: "5px solid #708090",
+              borderRadius: "10px",
+              width: "400px",
               height: "auto",
-              position: "absolute"
+              position: "relative",
+              left: "30px"
             }}
           />
         </div>
       </div>
-      <body className="intro">
-        <p> Loren ipsum </p>
-      </body>
     </React.Fragment>
   );
 }

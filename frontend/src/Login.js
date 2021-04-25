@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
-import logo from './logo.svg';
 import PropTypes from 'prop-types';
-import './Login.css';
+import './AccountManagement.css';
 
 async function loginUser(credentials) {
   return fetch('http://localhost:8080/login', {
@@ -29,15 +28,15 @@ export default function Login({setToken}) {
 
   return (
     <React.Fragment>
-      <div className="loginWrapper">
-        <div className="login">Please Log In</div>
+      <div className="accountWrapper">
+        <div className="login">Log In</div>
         <form onSubmit={handleSubmit}>
           <label>
-            <p>Username</p>
+            <div className="prompt">Username</div>
             <input type="text" onChange={e => setUserName(e.target.value)}/>
           </label>
           <label>
-            <p>Password</p>
+            <div className="prompt">Password</div>
             <input type="password" onChange={e => setPassword(e.target.value)}/>
           </label>
           <div>
