@@ -1,0 +1,22 @@
+-- Table: public.Account Info
+
+-- DROP TABLE public."Account Info";
+
+CREATE TABLE public."Account Info"
+(
+    "Username" "char"[] NOT NULL,
+    "Password" "char"[],
+    "Last Name" "char"[],
+    "First Name" "char"[],
+    "Banned Status" boolean,
+    "Friends" text[] COLLATE pg_catalog."default",
+    "Image" polygon[],
+    CONSTRAINT "Account Info_pkey" PRIMARY KEY ("Username")
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public."Account Info"
+    OWNER to postgres;
