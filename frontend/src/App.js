@@ -6,6 +6,7 @@ import CreateAccount from './CreateAccount';
 import Feed from './Feed';
 import Search from './Search';
 import './App.css';
+import axios from 'axios';
 
 export default class App extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ export default class App extends Component {
     // let goToLogin = false;
     // let goToCreateAccount = false;
     super(props);
-    this.state = {goToLogin: false, goToCreateAccount: false, loggedIn: false};
+    this.state = {goToLogin: false, goToCreateAccount: false, loggedIn: false, message: ""};
   }
 
   handleLoginClick = () => {
@@ -25,9 +26,24 @@ export default class App extends Component {
     this.setState({goToCreateAccount: true});
   }
 
+  componentDidMount = () => {
+    axios.get('http://localhost:5000/flask/hello')
+      .then(response => {
+        console.log("SUCCESS", response.data.message);
+        this.setState({message: response});
+      })
+  }
+
+  componentDidUpdate = () => {
+    axios.get('http://localhost:5000/flask/hello')
+      .then(response => {
+        console.log("SUCCESS", response.data.message);
+        this.setState({message: response});
+      })
+  }
+
   render() {
     if (!this.state.goToLogin && !this.state.goToCreateAccount && !this.state.loggedIn) {
-      console.log("not not");
       return (
         <React.Fragment>
           <title>Home</title>

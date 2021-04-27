@@ -1,6 +1,5 @@
 a:link, a:visited, a:active{
   color: #C3A093;
-  font-family:'Poppins', sans-serif;
   font-size: 25px;
   padding-right: 15px;
   padding-left: 15px;
@@ -12,7 +11,7 @@ a:hover {
 }
 
 body {
-  
+  font-family:'Poppins', sans-serif;
 }
 
 button[type=customize] {
@@ -43,7 +42,6 @@ h2 {
   border-radius: 10px;
   color: white;
   display: inline-block;
-  font-family: 'Poppins', sans-serif;
   font-size: 30px;
   font-weight: normal;
   margin-left: 20px;
@@ -62,7 +60,6 @@ p {
   text-align: center;
   color: black;
   font-size: 20px;
-  font-family: 'Poppins', sans-serif;
 }
 
 .app {
@@ -105,28 +102,11 @@ p {
 
 .intro {
   color: black;
-  font-family: 'Poppins', sans-serif;
   font-size: 18px;
   padding-top: 5px;
   padding-right: 30px;
   padding-bottom: 30px;
   padding-left: 60px;
-}
-
-.login {
-  background-color: #708090;
-  border-radius: 10px;
-  color: white;
-  display: inline-block;
-  font-family:'Poppins', sans-serif;
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 50px;
-  padding-top: 23px;
-  padding-bottom: 20px;
-  padding-right: 20px;
-  padding-left: 20px;
-  width: 300px;
 }
 
 .navigation {
@@ -146,7 +126,6 @@ p {
 .newSocialMedia {
   background-color: #708090;
   color: white;
-  font-family: 'Poppins', sans-serif;
   font-size: 40px;
   font-weight: bold;
   padding-top: 45px;
@@ -175,7 +154,6 @@ p {
 
 .welcomeMessage {
   color: black;
-  font-family: 'Poppins', sans-serif;
   font-size: 40px;
   text-align: center;
 }
@@ -244,12 +222,6 @@ input[type=goToLogin] {
   padding: 14px 20px;
   text-align: center;
   width: 35%;
-}
-
-label[for=email] {
-  color: white;
-  font-family: 'Helvetica Neue, Helvetica, Arial', sans-serif;
-  font-size: 20px;
 }
 
 @media (prefers-reduced-motion: no-preference) {

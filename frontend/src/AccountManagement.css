@@ -1,62 +1,74 @@
 h1 {
- 	text-align: center;
   	color: white;
   	font-size: 40px;
-  	font-family: 'Poppins', sans-serif;
+  	text-align: center;
 }
 
 .accountWrapper {
+	background-color: #696969;
 	border-radius: 14px;
-  	background-color: #696969;
   	margin: auto;
   	padding: 25px;
-  	text-align: center;
   	font-size: 20px;
-  	font-family:'Poppins', sans-serif;
+  	text-align: center;
   	width: 600px;
 }
 
+.login {
+  background-color: #708090;
+  border-radius: 10px;
+  color: white;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 50px;
+  padding-top: 23px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+  width: 300px;
+}
+
 .prompt {
-	text-align: center;
   	color: white;
   	font-size: 20px;
-  	font-family: 'Poppins', sans-serif;
   	margin-top: 18px;
   	margin-bottom: 7px;
+  	text-align: center;
 }
 
 input[type=text] {
-  width: 250px;
-  font-size: 15px;
   background-color: #DCDCDC;
   border: 1px solid #ccc;
   border-radius: 6px;
   box-sizing: border-box;
+  font-size: 15px;
   padding: 6px 6px;
+  width: 250px;
 }
 
 input[type=password] {
-  width: 250px;
-  font-size: 15px;
   background-color: #DCDCDC;
   border: 1px solid #ccc;
   border-radius: 6px;
   box-sizing: border-box;
+  font-size: 15px;
   padding: 6px 6px;
+  width: 250px;
 }
 
 button[type=submit] {
-  font-size: 20px;
   background-color: #708090;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-  color: white;
-  padding: 20px 20px;
   border: none;
   border-radius: 10px;
-  margin-top: 18px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  color: white;
   cursor: pointer;
-  text-align: center;
+  font-size: 20px;
   justify-content: center;
+  margin-top: 18px;
+  padding: 20px 20px;
+  text-align: center;
   width: 250px;
 }
 
