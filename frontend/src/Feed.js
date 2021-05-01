@@ -1,47 +1,158 @@
-import React from 'react';
+import React, {Component} from 'react';
 import './App.css';
 
-function Feed() {
-  const uploadedImage = React.useRef(null);
-  const imageUploader = React.useRef(null);
+// export default class Feed extends Component {
+// 
+//   constructor(props) {
+//     super(props);
+//     this.myRef = React.createRef();
+//     this.uploadedImage = React.createRef();
+//     this.imageUploader = React.createRef();
+//     this.images = [];
+//   }
+// 
+//   // var showImages = (
+//   //   <div className ="image">
+//   //     <img
+//   //       ref={uploadedImage}
+//   //       style={{
+//   //         borderRadius: "10px",
+//   //         width: "500px",
+//   //         height: "auto",
+//   //         position: "relative",
+//   //         left: "30px"
+//   //       }}
+//   //     />
+//   //   </div>
+//   // )
+// 
+//   handleImageUpload = e => {
+//     const [file] = e.target.files;
+//     if (file) {
+//       this.images.push(file);
+// //       const reader = new FileReader();
+// //       const {current} = this.uploadedImage;
+// //       current.file = file;
+// //       reader.onload = (e) => {
+// //           current.src = e.target.result;
+// //       }
+// // 
+// //       // var i;
+// //       // for (i = 0; i < this.images.length; i++) {
+// //       //   reader.readAsDataURL(this.images[i]);
+// //       // }
+// //       reader.readAsDataURL(file);
+//     }
+//     if (this.images.length > 0) {
+//       var i;
+//       for (i = 0; i < this.images.length; i++) {
+//         const reader = new FileReader();
+//         const {current} = this.uploadedImage;
+//         current.file = file;
+//         reader.onload = (e) => {
+//             current.src = e.target.result;
+//         }
+// 
+//         // var i;
+//         // for (i = 0; i < this.images.length; i++) {
+//         //   reader.readAsDataURL(this.images[i]);
+//         // }
+//         reader.readAsDataURL(this.images[i]);
+//       }
+//     }
+//     console.log(this.uploadedImage);
+//     console.log(this.images);
+//   };
+//   //Backend: store images in the servers, send a GET request to images that the follower posted
+// 
+//   render() {
+//     var showImages = (
+//       <div className ="image">
+//         <img
+//           ref={this.uploadedImage}
+//           style={{
+//             borderRadius: "10px",
+//             width: "500px",
+//             height: "auto",
+//             position: "relative",
+//             left: "30px"
+//           }}
+//         />
+//       </div>
+//     )
+// 
+//     return (
+//       <React.Fragment>
+//         <title>Feed</title>
+//         <h2>Your Feed</h2>
+//         <div className="upload">
+//           <input type="file" multiple accept="image/*" onChange={this.handleImageUpload} ref={this.imageUploader}/>
+//           {/* {showImages} */}
+//           {(this.images || []).map(url => (
+//                         <img src={url} alt="..." />
+//                     ))}
+//         </div>
+//       </React.Fragment>
+//     );
+//   }
+// }
 
-  const handleImageUpload = e => {
-    const [file] = e.target.files;
-    if (file) {
-      const reader = new FileReader();
-      const {current} = uploadedImage;
-      current.file = file;
-      reader.onload = (e) => {
-          current.src = e.target.result;
-      }
-      reader.readAsDataURL(file);
+// export default Feed;
+
+export default class Feed extends Component {
+
+    fileObj = [];
+    fileArray = [];
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            file: [null]
+        }
+        this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this)
+        this.uploadFiles = this.uploadFiles.bind(this)
     }
-  };
-  //Backend: store images in the servers, send a GET request to images that the follower posted
 
-  return (
-    <React.Fragment>
-      <title>Feed</title>
-      <h2>Your Feed</h2>
-      <div className="upload">
-        <input type="file" multiple accept="image/*" onChange={handleImageUpload} ref={imageUploader}
-          style={{display: "none"}}/>
-        <div className ="image" onClick={() => imageUploader.current.click()}>
-          <img
-            ref={uploadedImage}
-            style={{
-              border: "5px solid #708090",
-              borderRadius: "10px",
-              width: "400px",
-              height: "auto",
-              position: "relative",
-              left: "30px"
-            }}
-          />
-        </div>
-      </div>
-    </React.Fragment>
-  );
+    uploadMultipleFiles(e) {
+        this.fileObj.push(e.target.files)
+        for (let i = 0; i < this.fileObj[0].length; i++) {
+            this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]))
+        }
+        this.setState({ file: this.fileArray })
+    }
+
+    uploadFiles(e) {
+        e.preventDefault()
+        console.log(this.state.file)
+    }
+
+    render() {
+        return (
+            <form>
+              <div className="upload">
+                <input type="file" onChange={this.uploadMultipleFiles} multiple />
+              </div>
+                {/* <button type="upload" className="upload" onClick={this.uploadFiles}>Upload</button> */}
+                <div className="multipleImages">
+                  {(this.fileArray || []).map(url => (
+                    <img src={url} alt="..." 
+                      style={{
+                        borderRadius: "10px",
+                        width: "500px",
+                        height: "auto",
+                        marginTop: "20px",
+                        marginRight: "20px",
+                        left: "30px"
+                        }}
+                        />
+                      ))}
+                </div>
+
+                {/* <div className="form-group"> */}
+                {/*     <input type="file" className="form-control" onChange={this.uploadMultipleFiles} multiple /> */}
+                {/* </div> */}
+                {/* <button type="upload" className="upload" onClick={this.uploadFiles}>Upload</button> */}
+            </form >
+        )
+    }
 }
-
-export default Feed;

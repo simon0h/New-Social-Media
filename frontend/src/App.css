@@ -88,12 +88,6 @@ p {
 
 }
 
-/* Center the avatar image inside this container */
-/*.imgContainer {
-  text-align: center;
-  margin: 24px 0 12px 0;
-}*/
-
 .image {
   border: "2px dashed black";
   height: "60px";
@@ -133,6 +127,7 @@ p {
   padding-right: 30px;
   padding-left: 60px;
 }
+
 .picker {
   padding-left:30px;
 }
@@ -145,11 +140,19 @@ p {
 }
 
 .upload {
+  background-color: #708090;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  color: white;
+  cursor: pointer;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
+  font-size: 25px;
+  justify-content: left;
+  margin-top: 20px;
+  padding: 14px 20px;
+  text-align: center;
+  width: 15%;
 }
 
 .welcomeMessage {
@@ -159,34 +162,8 @@ p {
 }
 
 .wrapper {
-}
 
-/*input[type=text], select {
-  width: 40%;
-  font-size: 15px;
-  background-color: #DCDCDC;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-  margin-top: 12px;
-  margin-bottom: 12px;
-  margin-left: 30%;
-  margin-right: 30%;
-  padding: 6px 6px;
 }
-
-input[type=submit] {
-  width: 40%;
-  font-size: 20px;
-  background-color: #708090;
-  color: white;
-  padding: 20px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  text-align: center;
-  justify-content: center;
-}*/
 
 button[type=accountManagement] {
   font-size: 20px;
@@ -208,6 +185,49 @@ button[type=accountManagement]:hover {
   color: white;
 }
 
+/*button[type=upload] {
+  font-size: 20px;
+  background-color: #708090;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  color: white;
+  padding: 20px 20px;
+  border: none;
+  border-radius: 10px;
+  margin-top: 18px;
+  cursor: pointer;
+  text-align: center;
+  justify-content: center;
+  width: 250px;
+}*/
+
+/*button[type=upload]:hover {
+  background: #4682B4;
+  color: white;
+}*/
+
+/*input[type=file] {
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  color: black;
+  cursor: pointer;
+  display: flex;
+  font-size: 20px;
+  justify-content: left;
+  margin: auto;
+  margin-left: 20px;
+  margin-top: 8px;
+  padding: 14px 20px;
+  text-align: center;
+  width: 25%;
+}*/
+
+/*input[type=file]:hover {
+  background: #4682B4;
+  color: white;
+}*/
+
 input[type=goToLogin] {
   background-color: #DEB887;
   border: none;
@@ -223,6 +243,33 @@ input[type=goToLogin] {
   text-align: center;
   width: 35%;
 }
+
+/*input[type=submit] {
+  width: 40%;
+  font-size: 20px;
+  background-color: #708090;
+  color: white;
+  padding: 20px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  justify-content: center;
+}*/
+
+/*input[type=text], select {
+  width: 40%;
+  font-size: 15px;
+  background-color: #DCDCDC;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 30%;
+  margin-right: 30%;
+  padding: 6px 6px;
+}*/
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
