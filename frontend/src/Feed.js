@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import './App.css';
+import React, {Component} from "react";
+import "./App.css";
 
 // export default class Feed extends Component {
 // 
@@ -118,7 +118,7 @@ export default class Feed extends Component {
         for (let i = 0; i < this.fileObj[0].length; i++) {
             this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]))
         }
-        this.setState({ file: this.fileArray })
+        this.setState({file: this.fileArray})
     }
 
     uploadFiles(e) {
@@ -135,17 +135,8 @@ export default class Feed extends Component {
                 {/* <button type="upload" className="upload" onClick={this.uploadFiles}>Upload</button> */}
                 <div className="multipleImages">
                   {(this.fileArray || []).map(url => (
-                    <img src={url} alt="..." 
-                      style={{
-                        borderRadius: "10px",
-                        width: "500px",
-                        height: "auto",
-                        marginTop: "20px",
-                        marginRight: "20px",
-                        left: "30px"
-                        }}
-                        />
-                      ))}
+                    <img src={url} alt="..."/>
+                  ))}
                 </div>
 
                 {/* <div className="form-group"> */}

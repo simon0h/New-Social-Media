@@ -11,7 +11,7 @@ a:hover {
 }
 
 body {
-  font-family:'Poppins', sans-serif;
+  font-family:"Poppins", sans-serif;
 }
 
 button[type=customize] {
@@ -101,6 +101,22 @@ p {
   padding-right: 30px;
   padding-bottom: 30px;
   padding-left: 60px;
+}
+
+.fontPicker {
+  font-size: 18px;
+  margin-left: 20px;
+  margin-top: 15px;
+  margin-right: 15px;
+}
+
+.multipleImages {
+  border-radius: 10px;
+  height: auto;
+  left: 30px;
+  margin-top: 20px;
+  margin-right: 20px;
+  width: 500px;
 }
 
 .navigation {
