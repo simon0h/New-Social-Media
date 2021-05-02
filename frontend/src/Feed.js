@@ -135,10 +135,15 @@ export default class Feed extends Component {
                 {/* <button type="upload" className="upload" onClick={this.uploadFiles}>Upload</button> */}
                 <div className="multipleImages">
                   {(this.fileArray || []).map(url => (
-                    <img src={url} alt="..."/>
+                    <img src={url} alt="..." style={{
+                      borderRadius:"10px",
+                      height:"auto",
+                      left:"30px",
+                      marginTop:"20px",
+                      marginRight:"20px",
+                      width:"500px"}}/>
                   ))}
                 </div>
-
                 {/* <div className="form-group"> */}
                 {/*     <input type="file" className="form-control" onChange={this.uploadMultipleFiles} multiple /> */}
                 {/* </div> */}

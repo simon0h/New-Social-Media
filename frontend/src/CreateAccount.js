@@ -19,6 +19,11 @@ export default class CreateAccount extends Component {
               <input type="text"/>
               {/* <input type="password" onChange={e => setPassword(e.target.value)}/> */}
             </label>
+            <label>
+              <div className="prompt">Enter password again</div>
+              <input type="text"/>
+              {/* <input type="password" onChange={e => setPassword(e.target.value)}/> */}
+            </label>
             <div>
               <button type="submit">Submit</button>
             </div>
