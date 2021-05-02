@@ -2,9 +2,10 @@ import numpy as np
 import time
 import json
 import warnings
+from flask_restful import Api, Resource, reqparse
 
 
-class Post:
+class Post(Resource):
     def __init__(self, user="", description="", is_video=False, file=None, post_time=None, data_dict=None):
         if data_dict is not None:
             self.set_data(data_dict)
@@ -32,7 +33,7 @@ class Post:
         self.file = data_dict['file']
 
 
-class Profile:
+class Profile(Resource):
     def __init__(self, name="", status="", image="", friends=[], posts=[], current_views=[], data_dict=None):
         if data_dict is not None:
             self.set_data(data_dict)
@@ -67,7 +68,7 @@ class Profile:
         self.current_views = [Post(data_dict=p_dict) for p_dict in data_dict['current_views']]
 
 
-class Database:
+class Database(Resource)
     def __init__(self, file=None):
         if file is None:
             self.data = {}
