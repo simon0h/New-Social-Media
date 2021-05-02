@@ -1,4 +1,4 @@
-import numpy as np
+# import numpy as np
 import time
 import json
 import warnings
@@ -97,7 +97,7 @@ class Database(Resource):
         assert isinstance(post, Post), "input of add_post should be of Class Post"
         assert post.user in self.data, "user of post does not exist"
         self.data[post.user].add_post(post)
-        
+
 class SocialNet(Resource):
   def get(self):
     return {
@@ -131,7 +131,7 @@ class SocialNet(Resource):
     final_ret = {"status": "Success", "message": message}
 
     return final_ret
-
+        
         
 db = Database()
 db.add_profile(Profile(name="y"))

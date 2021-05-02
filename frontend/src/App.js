@@ -29,7 +29,7 @@ export default class App extends Component {
   componentDidMount = () => {
     axios.get("http://localhost:5000/flask/hello")
       .then(response => {
-        // console.log("SUCCESS", response.data.message);
+        console.log("SUCCESS", response.data.message);
         this.setState({message: response});
       })
   }
@@ -37,7 +37,7 @@ export default class App extends Component {
   componentDidUpdate = () => {
     axios.get("http://localhost:5000/flask/hello")
       .then(response => {
-        // console.log("SUCCESS", response.data.message);
+        console.log("SUCCESS", response.data.message);
         this.setState({message: response});
       })
   }
