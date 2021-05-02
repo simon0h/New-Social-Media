@@ -1,28 +1,28 @@
-import React, {Component} from 'react';
-import ReactSearchBox from 'react-search-box';
-import './App.css';
+import React, {Component} from "react";
+import ReactSearchBox from "react-search-box";
+import "./App.css";
 
 export default class Search extends Component {
   data = [
     {
-      key: 'john',
-      value: 'John Doe',
+      key: "john",
+      value: "John Doe",
     },
     {
-      key: 'jane',
-      value: 'Jane Doe',
+      key: "jane",
+      value: "Jane Doe",
     },
     {
-      key: 'mary',
-      value: 'Mary Phillips',
+      key: "mary",
+      value: "Mary Phillips",
     },
     {
-      key: 'robert',
-      value: 'Robert',
+      key: "robert",
+      value: "Robert",
     },
     {
-      key: 'karius',
-      value: 'Karius',
+      key: "karius",
+      value: "Karius",
     },
   ]
 

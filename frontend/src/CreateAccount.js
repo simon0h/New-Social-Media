@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import './AccountManagement.css';
+import React, {Component} from "react";
+import PropTypes from "prop-types";
+import "./AccountManagement.css";
 
 export default class CreateAccount extends Component {
   render() {

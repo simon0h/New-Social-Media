@@ -1,12 +1,12 @@
-import React, {Component} from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import Login from './Login';
-import Profile from './Profile';
-import CreateAccount from './CreateAccount';
-import Feed from './Feed';
-import Search from './Search';
-import './App.css';
-import axios from 'axios';
+import React, {Component} from "react";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
+import Login from "./Login";
+import Profile from "./Profile";
+import CreateAccount from "./CreateAccount";
+import Feed from "./Feed";
+import Search from "./Search";
+import "./App.css";
+import axios from "axios";
 
 export default class App extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ export default class App extends Component {
     // let goToLogin = false;
     // let goToCreateAccount = false;
     super(props);
-    this.state = {goToLogin: false, goToCreateAccount: false, loggedIn: false, message: ""};
+    this.state = {goToLogin: false, goToCreateAccount: false, loggedIn: true, message: ""};
   }
 
   handleLoginClick = () => {
@@ -27,17 +27,17 @@ export default class App extends Component {
   }
 
   componentDidMount = () => {
-    axios.get('http://localhost:5000/flask/hello')
+    axios.get("http://localhost:5000/flask/hello")
       .then(response => {
-        console.log("SUCCESS", response.data.message);
+        // console.log("SUCCESS", response.data.message);
         this.setState({message: response});
       })
   }
 
   componentDidUpdate = () => {
-    axios.get('http://localhost:5000/flask/hello')
+    axios.get("http://localhost:5000/flask/hello")
       .then(response => {
-        console.log("SUCCESS", response.data.message);
+        // console.log("SUCCESS", response.data.message);
         this.setState({message: response});
       })
   }
