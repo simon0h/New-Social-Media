@@ -1,16 +1,32 @@
+-- Database: test
+
+-- DROP DATABASE test;
+
+CREATE DATABASE test
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'English_United States.1252'
+    LC_CTYPE = 'English_United States.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+/////////////////////
+
 -- Table: public.Account Info
 
 -- DROP TABLE public."Account Info";
 
 CREATE TABLE public."Account Info"
 (
-    "Username" "char"[] NOT NULL,
-    "Password" "char"[],
-    "Last Name" "char"[],
-    "First Name" "char"[],
-    "Banned Status" boolean,
-    "Friends" text[] COLLATE pg_catalog."default",
-    "Image" polygon[],
+    "Username" character varying COLLATE pg_catalog."default" NOT NULL,
+    "First Name" character varying COLLATE pg_catalog."default",
+    "Last Name" character varying COLLATE pg_catalog."default",
+    "Password" character varying COLLATE pg_catalog."default",
+    "Images" character varying[] COLLATE pg_catalog."default",
+    "Followed" character varying[] COLLATE pg_catalog."default",
+    "Font" text COLLATE pg_catalog."default",
+    "Color" bytea,
     CONSTRAINT "Account Info_pkey" PRIMARY KEY ("Username")
 )
 WITH (
@@ -19,4 +35,52 @@ WITH (
 TABLESPACE pg_default;
 
 ALTER TABLE public."Account Info"
+    OWNER to postgres;
+
+//////////////////////////
+
+-- Table: public.Feed
+
+-- DROP TABLE public."Feed";
+
+CREATE TABLE public."Feed"
+(
+    "Images" character varying COLLATE pg_catalog."default",
+    "Username" character varying COLLATE pg_catalog."default",
+    "Post Number" integer NOT NULL,
+    "Font" character varying COLLATE pg_catalog."default",
+    "Time Posted" timestamp with time zone,
+    CONSTRAINT "Feed_pkey" PRIMARY KEY ("Post Number")
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public."Feed"
+    OWNER to postgres;
+
+//////////////////////////////
+
+-- Table: public.Profile
+
+-- DROP TABLE public."Profile";
+
+CREATE TABLE public."Profile"
+(
+    "Owner Username" character varying COLLATE pg_catalog."default" NOT NULL,
+    "First Name" character varying COLLATE pg_catalog."default",
+    "Last Name" character varying COLLATE pg_catalog."default",
+    "Font" character varying COLLATE pg_catalog."default",
+    "Color" bytea,
+    "Followed" character varying[] COLLATE pg_catalog."default",
+    "Images" character varying COLLATE pg_catalog."default",
+    CONSTRAINT "Profile_pkey" PRIMARY KEY ("Owner Username")
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE public."Profile"
     OWNER to postgres;
