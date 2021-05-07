@@ -133,30 +133,35 @@ class SocialNet(Resource):
 
         if request_type == "images":
             message = loadedImages(self.path)
-        elif request_type == "both":
+        if request_type == "both":
             if ret_msg[0] == "a" and ret_msg[2] == "a":# Check with the database for valid login
                 # ret_msg is a string in the format of "username"."password"
                 # so, you need to check the string before the period and after the period and return "ValidCombo" 
                 # if the databse says that they are a valid combination
                 message = "ValidCombo"
-        elif request_type == "checkUniqueUsername":
+        if request_type == "checkUniqueUsername":
             if ret_msg == "a":# Check with the database
                 message = "not unique"
             else:
                 message = "unique"
-        elif request_type == "checkValidPassword":
+        if request_type == "checkValidPassword":
             if ret_msg[0] ==  ret_msg[2]: # Check with the database
                 # ret_msg is a string in the format of "password"."passwordConfirm"
                 # so, you need to check the string before the period and after the period and return "match" if they match
                 message = "match"
             else:
                 message = "no match"
-        elif request_type == "newAccountCreated":
+        if request_type == "newAccountCreated":
             message = "new account created"
-        elif request_type == "textPosts":
+        if request_type == "getFollowingTextPosts":
             posts = ["Text post 1", "Text post 2"] # Check with the backend for all text posts
-        elif request_type == "myTextPosts":
+        if request_type == "getMyTextPosts":
             posts = ["My text post 1", "My text post 2"] # Check with the backend for all text posts
+        if request_type == "newTextPost":
+            print(ret_msg)
+            posts.append(ret_msg)
+            # Store the ret_msg in database
+            # Return the newTextPost
 
         # if ret_msg:
         #     message = "Your message: {}".format(ret_msg)

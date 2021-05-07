@@ -12,7 +12,7 @@ export default class Profile extends Component {
   }
 
   componentDidMount = () => {
-    axios.post("http://localhost:5000/flask/hello", {type: "myTextPosts"})
+    axios.post("http://localhost:5000/flask/hello", {type: "getMyTextPosts"})
       .then(response => {
         this.setState({posts: response.data.posts})
         console.log(this.state.posts);

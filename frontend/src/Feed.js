@@ -8,13 +8,14 @@ export default class Feed extends Component {
 
   constructor(props) {
       super(props);
-      this.state = {file: [null], post: false, posts: []};
+      this.state = {file: [null], post: false, textPost: "", posts: []};
       this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
       this.uploadFiles = this.uploadFiles.bind(this);
+      this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount = () => {
-    axios.post("http://localhost:5000/flask/hello", {type: "textPosts"})
+    axios.post("http://localhost:5000/flask/hello", {type: "getFollowingTextPosts"})
       .then(response => {
         this.setState({posts: response.data.posts})
         console.log(this.state.posts);
@@ -40,6 +41,15 @@ export default class Feed extends Component {
 
   PostOff = () => {
     this.setState({post: false});
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    axios.post("http://localhost:5000/flask/hello", {type: "newTextPost", message: this.state.textPost})
+      .then(response => {
+        this.setState({posts: response.data.posts})
+        console.log("handleSubmit");
+    })
   }
 
   render() {
@@ -76,10 +86,10 @@ export default class Feed extends Component {
         </form>
       )
       postTextButton = (
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <label>
-            Text post:
-            <input type="text" name="textPost"/>
+            <div className="textPost">Text post:</div>
+            <input type="text" onChange={e => this.setState({textPost: e.target.value})}/>
           </label>
           <input type="submit" value="Submit"/>
         </form>

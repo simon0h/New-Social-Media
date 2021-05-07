@@ -35,7 +35,7 @@ export default function CreateAccount() {
     var n = password.indexOf(".");
     if (n === -1) {
       setValidPassword(true);
-      let payload = password + "," + confirmPassword;
+      let payload = password + "." + confirmPassword;
       axios.post("http://localhost:5000/flask/hello", {type: "checkValidPassword", message: payload})
         .then(response => {
           console.log("matching password: ", response.data.message);
