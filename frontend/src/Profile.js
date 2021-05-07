@@ -1,13 +1,22 @@
 import React, {Component} from "react";
 import {SketchPicker} from "react-color";
 import "./App.css";
+import axios from "axios"
 
 export default class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = {backgroundColor: "white", customize: false, font: "Poppins"};
+    this.state = {backgroundColor: "white", customize: false, font: "Poppins", posts: []};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount = () => {
+    axios.post("http://localhost:5000/flask/hello", {type: "myTextPosts"})
+      .then(response => {
+        this.setState({posts: response.data.posts})
+        console.log(this.state.posts);
+      })
   }
 
   CustomizeOn = () => {
@@ -43,9 +52,11 @@ export default class Profile extends Component {
 
   render () {
     var customize = this.state.customize;
+    var posts = this.state.posts;
     let customizeButton;
     let colorPicker;
     let fontPicker;
+    let allTextPosts;
 
     var mystyle = {
       backgroundColor: this.state.backgroundColor,
@@ -56,6 +67,11 @@ export default class Profile extends Component {
       fontFamily: this.state.font,
       fontSize: "25px"
     };
+
+    allTextPosts = (
+      <div>
+      {posts.map(p => <div className="posts" key={p}>{p}</div>)}
+      </div>);
 
     if (!customize) {
       customizeButton = <button type="customize" onClick={this.CustomizeOn}>Customize</button>;
@@ -88,7 +104,7 @@ export default class Profile extends Component {
             {/* <input type="submit" value="Submit" style={{borderRadius: "8px", fontFamily: "Poppins", fontSize: "15px", marginLeft: "15px"}}/> */}
           </form>
         </div>
-      )
+      );
     }
     return (
       <React.Fragment>
@@ -99,10 +115,10 @@ export default class Profile extends Component {
           {colorPicker}
           {fontPicker}
           <div style={fontChoice}>
-            <p>Loren ipsum</p>
+            {allTextPosts}
           </div>
         </div>
       </React.Fragment>
-    );
+    )
   }
 }

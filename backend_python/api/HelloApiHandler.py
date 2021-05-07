@@ -8,14 +8,14 @@ class HelloApiHandler(Resource):
       }
 
   def post(self):
-    print(self)
+    #print(self)
     parser = reqparse.RequestParser()
     parser.add_argument('type', type=str)
     parser.add_argument('message', type=str)
 
     args = parser.parse_args()
 
-    print(args)
+    #print(args)
     # note, the post req from frontend needs to match the strings here (e.g. 'type and 'message')
 
     request_type = args['type']
@@ -26,7 +26,7 @@ class HelloApiHandler(Resource):
     ret_msg = request_json
 
     if ret_msg:
-      message = "Your Message Requested: {}".format(ret_msg)
+      message = "Your Message: {}".format(ret_msg)
     else:
       message = "No Msg"
     

@@ -1,154 +1,102 @@
 import React, {Component} from "react";
 import "./App.css";
-
-// export default class Feed extends Component {
-// 
-//   constructor(props) {
-//     super(props);
-//     this.myRef = React.createRef();
-//     this.uploadedImage = React.createRef();
-//     this.imageUploader = React.createRef();
-//     this.images = [];
-//   }
-// 
-//   // var showImages = (
-//   //   <div className ="image">
-//   //     <img
-//   //       ref={uploadedImage}
-//   //       style={{
-//   //         borderRadius: "10px",
-//   //         width: "500px",
-//   //         height: "auto",
-//   //         position: "relative",
-//   //         left: "30px"
-//   //       }}
-//   //     />
-//   //   </div>
-//   // )
-// 
-//   handleImageUpload = e => {
-//     const [file] = e.target.files;
-//     if (file) {
-//       this.images.push(file);
-// //       const reader = new FileReader();
-// //       const {current} = this.uploadedImage;
-// //       current.file = file;
-// //       reader.onload = (e) => {
-// //           current.src = e.target.result;
-// //       }
-// // 
-// //       // var i;
-// //       // for (i = 0; i < this.images.length; i++) {
-// //       //   reader.readAsDataURL(this.images[i]);
-// //       // }
-// //       reader.readAsDataURL(file);
-//     }
-//     if (this.images.length > 0) {
-//       var i;
-//       for (i = 0; i < this.images.length; i++) {
-//         const reader = new FileReader();
-//         const {current} = this.uploadedImage;
-//         current.file = file;
-//         reader.onload = (e) => {
-//             current.src = e.target.result;
-//         }
-// 
-//         // var i;
-//         // for (i = 0; i < this.images.length; i++) {
-//         //   reader.readAsDataURL(this.images[i]);
-//         // }
-//         reader.readAsDataURL(this.images[i]);
-//       }
-//     }
-//     console.log(this.uploadedImage);
-//     console.log(this.images);
-//   };
-//   //Backend: store images in the servers, send a GET request to images that the follower posted
-// 
-//   render() {
-//     var showImages = (
-//       <div className ="image">
-//         <img
-//           ref={this.uploadedImage}
-//           style={{
-//             borderRadius: "10px",
-//             width: "500px",
-//             height: "auto",
-//             position: "relative",
-//             left: "30px"
-//           }}
-//         />
-//       </div>
-//     )
-// 
-//     return (
-//       <React.Fragment>
-//         <title>Feed</title>
-//         <h2>Your Feed</h2>
-//         <div className="upload">
-//           <input type="file" multiple accept="image/*" onChange={this.handleImageUpload} ref={this.imageUploader}/>
-//           {/* {showImages} */}
-//           {(this.images || []).map(url => (
-//                         <img src={url} alt="..." />
-//                     ))}
-//         </div>
-//       </React.Fragment>
-//     );
-//   }
-// }
-
-// export default Feed;
+import axios from "axios"
 
 export default class Feed extends Component {
+  fileObj = [];
+  fileArray = [];
 
-    fileObj = [];
-    fileArray = [];
+  constructor(props) {
+      super(props);
+      this.state = {file: [null], post: false, posts: []};
+      this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
+      this.uploadFiles = this.uploadFiles.bind(this);
+  }
 
-    constructor(props) {
-        super(props)
-        this.state = {
-            file: [null]
-        }
-        this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this)
-        this.uploadFiles = this.uploadFiles.bind(this)
+  componentDidMount = () => {
+    axios.post("http://localhost:5000/flask/hello", {type: "textPosts"})
+      .then(response => {
+        this.setState({posts: response.data.posts})
+        console.log(this.state.posts);
+      })
+  }
+
+  uploadMultipleFiles(e) {
+    this.fileObj.push(e.target.files);
+    for (let i = 0; i < this.fileObj[0].length; i++) {
+        this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]));
     }
+    this.setState({file: this.fileArray});
+  }
 
-    uploadMultipleFiles(e) {
-        this.fileObj.push(e.target.files)
-        for (let i = 0; i < this.fileObj[0].length; i++) {
-            this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]))
-        }
-        this.setState({file: this.fileArray})
-    }
+  uploadFiles(e) {
+    e.preventDefault();
+    console.log(this.state.file);
+  }
 
-    uploadFiles(e) {
-        e.preventDefault()
-        console.log(this.state.file)
-    }
+  PostOn = () => {
+    this.setState({post: true});
+  }
 
-    render() {
-        return (
-            <form>
-              <div className="upload">
-                <input type="file" onChange={this.uploadMultipleFiles} multiple />
-              </div>
-                {/* <button type="upload" className="upload" onClick={this.uploadFiles}>Upload</button> */}
-                <div className="multipleImages">
-                  {(this.fileArray || []).map(url => (
-                    <img src={url} alt="..." style={{
-                      borderRadius:"10px",
-                      height:"auto",
-                      left:"30px",
-                      marginTop:"20px",
-                      marginRight:"20px",
-                      width:"500px"}}/>
-                  ))}
-                </div>
-                {/* <div className="form-group"> */}
-                {/*     <input type="file" className="form-control" onChange={this.uploadMultipleFiles} multiple /> */}
-                {/* </div> */}
-                {/* <button type="upload" className="upload" onClick={this.uploadFiles}>Upload</button> */}
-            </form >
-        )
+  PostOff = () => {
+    this.setState({post: false});
+  }
+
+  render() {
+    var post = this.state.post;
+    var posts = this.state.posts;
+    let postButton;
+    let postImageButton;
+    let postTextButton;
+    let allTextPosts;
+
+    if (!post) {
+      postButton = <button type="post" onClick={this.PostOn}>Post</button>;
+      postImageButton = <div></div>;
+      postTextButton = <div></div>;
     }
+    else {
+      postButton = <button type="post" onClick={this.PostOff}>Done</button>;
+      postImageButton = (
+        <form>
+          <div className="upload">
+            <input type="file" onChange={this.uploadMultipleFiles} multiple/>
+          </div>
+          <div className="multipleImages">
+            {(this.fileArray || []).map(url => (
+              <img src={url} alt="..." style={{
+                borderRadius:"10px",
+                height:"auto",
+                left:"30px",
+                marginTop:"20px",
+                marginRight:"20px",
+                width:"500px"}}/>
+            ))}
+          </div>
+        </form>
+      )
+      postTextButton = (
+        <form>
+          <label>
+            Text post:
+            <input type="text" name="textPost"/>
+          </label>
+          <input type="submit" value="Submit"/>
+        </form>
+      )
+    }
+    allTextPosts = (
+      <div>
+      {posts.map(p => <div className="posts" key={p}>{p}</div>)}
+      </div>);
+
+    return (
+      <React.Fragment>
+        {postButton}
+        {postImageButton}
+        {postTextButton}
+        {allTextPosts}
+      </React.Fragment>
+    )
+  }
 }

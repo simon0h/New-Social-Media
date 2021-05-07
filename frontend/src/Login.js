@@ -1,29 +1,44 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
 import "./AccountManagement.css";
+import axios from "axios";
 
-async function loginUser(credentials) {
-  return fetch("http://localhost:8080/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(credentials)
- })
-  .then(data => data.json())
-}
+// async function loginUser(credentials) {
+//   return fetch("http://localhost:8080/login", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json"
+//     },
+//     body: JSON.stringify(credentials)
+//  })
+//   .then(data => data.json())
+// }
 
 export default function Login({setToken}) {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleSubmit = async e => {
     e.preventDefault();
-    const token = await loginUser({
-      username,
-      password
-    });
-    setToken(token);
+    let payload = username + "." + password;
+
+    axios.post("http://localhost:5000/flask/hello", {type: "both", message: payload})
+      .then(response => {
+        console.log("Both: ", response.data.message);
+        if (response.data.message === "ValidCombo") {
+          console.log("Valid");
+          //validLogin.setLoginStatus(true);
+          setLoggedIn(true);
+          setToken(true);
+        }
+    }).catch(error => {
+      console.log(error.response)
+    })
+    if (loggedIn) {
+      console.log("in if");
+      setToken(true);
+    }
   }
 
   return (

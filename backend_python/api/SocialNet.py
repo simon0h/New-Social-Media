@@ -3,7 +3,7 @@ import time
 import json
 import warnings
 from flask_restful import Api, Resource, reqparse
-
+from os import listdir
 
 class Post(Resource):
     def __init__(self, user="", description="", is_video=False, file=None, post_time=None, data_dict=None):
@@ -99,38 +99,71 @@ class Database(Resource):
         self.data[post.user].add_post(post)
 
 class SocialNet(Resource):
-  def get(self):
-    return {
-      'resultStatus': 'SUCCESS',
-      'message': "In Python"
-      }
+    loggedIn = True # Get this value from the databse
 
-  def post(self):
-    print(self)
-    parser = reqparse.RequestParser()
-    parser.add_argument('type', type=str)
-    parser.add_argument('message', type=str)
+    def get(self):
+        # return {
+        # 'resultStatus': 'SUCCESS',
+        # 'message': "In Python"
+        # }
+        if (self.loggedIn):# Check with the database to see if the user is logged in
+            return {'loginStatus': True}
+        else:
+            return {'loginStatus': False} 
 
-    args = parser.parse_args()
+    def post(self):
+        #print(self)
+        parser = reqparse.RequestParser()
+        parser.add_argument('type', type=str)
+        parser.add_argument('message', type=str)
 
-    print(args)
-    # note, the post req from frontend needs to match the strings here (e.g. 'type and 'message')
+        args = parser.parse_args()
 
-    request_type = args['type']
-    request_json = args['message']
-    # ret_status, ret_msg = ReturnData(request_type, request_json)
-    # currently just returning the req straight
-    ret_status = request_type
-    ret_msg = request_json
+        #print(args)
+        # note, the post req from frontend needs to match the strings here (e.g. 'type and 'message')
 
-    if ret_msg:
-      message = "Your Message Requested: {}".format(ret_msg)
-    else:
-      message = "No Msg"
-    
-    final_ret = {"status": "Success", "message": message}
+        request_type = args['type']
+        request_json = args['message']
+        # ret_status, ret_msg = ReturnData(request_type, request_json)
+        # currently just returning the req straight
+        ret_status = request_type
+        ret_msg = request_json
+        message = "No message"
+        posts = []
 
-    return final_ret
+        if request_type == "images":
+            message = loadedImages(self.path)
+        elif request_type == "both":
+            if ret_msg[0] == "a" and ret_msg[2] == "a":# Check with the database for valid login
+                # ret_msg is a string in the format of "username"."password"
+                # so, you need to check the string before the period and after the period and return "ValidCombo" 
+                # if the databse says that they are a valid combination
+                message = "ValidCombo"
+        elif request_type == "checkUniqueUsername":
+            if ret_msg == "a":# Check with the database
+                message = "not unique"
+            else:
+                message = "unique"
+        elif request_type == "checkValidPassword":
+            if ret_msg[0] ==  ret_msg[2]: # Check with the database
+                # ret_msg is a string in the format of "password"."passwordConfirm"
+                # so, you need to check the string before the period and after the period and return "match" if they match
+                message = "match"
+            else:
+                message = "no match"
+        elif request_type == "newAccountCreated":
+            message = "new account created"
+        elif request_type == "textPosts":
+            posts = ["Text post 1", "Text post 2"] # Check with the backend for all text posts
+        elif request_type == "myTextPosts":
+            posts = ["My text post 1", "My text post 2"] # Check with the backend for all text posts
+
+        # if ret_msg:
+        #     message = "Your message: {}".format(ret_msg)
+
+        final_ret = {"status": "Success", "message": message, "posts": posts}
+
+        return final_ret
         
         
 db = Database()
@@ -143,4 +176,4 @@ db.save_data("1.txt")
 p = Profile()
 
 db2 = Database("1.txt")
-print(db.get_data_dict())
+#print(db.get_data_dict())
