@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import PropTypes from "prop-types";
 import "./AccountManagement.css";
-import axios from "axios"
+import axios from "axios";
 
 export default function CreateAccount() {
   const [username, setUserName] = useState();

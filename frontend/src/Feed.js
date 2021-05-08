@@ -1,20 +1,21 @@
 import React, {Component} from "react";
 import "./App.css";
-import axios from "axios"
+import axios from "axios";
 
 export default class Feed extends Component {
   fileObj = [];
   fileArray = [];
 
   constructor(props) {
-      super(props);
-      this.state = {file: [null], post: false, textPost: "", posts: []};
-      this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
-      this.uploadFiles = this.uploadFiles.bind(this);
-      this.handleSubmit = this.handleSubmit.bind(this);
+    super(props);
+    this.state = {file: [null], post: false, textPost: "", posts: []};
+    this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
+    this.uploadFiles = this.uploadFiles.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount = () => {
+    //e.preventDefault();
     axios.post("http://localhost:5000/flask/hello", {type: "getFollowingTextPosts"})
       .then(response => {
         this.setState({posts: response.data.posts})

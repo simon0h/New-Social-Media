@@ -130,6 +130,7 @@ class SocialNet(Resource):
         ret_msg = request_json
         message = "No message"
         posts = []
+        users = []
 
         if request_type == "images":
             message = loadedImages(self.path)
@@ -162,11 +163,18 @@ class SocialNet(Resource):
             posts.append(ret_msg)
             # Store the ret_msg in database
             # Return the newTextPost
+        if request_type == "getUsers":
+            users = ["user1", "user2", "user3"]
+            # Get an array of all users from the database
+        if request_type == "follow":
+            # send to databse code
+            message = ret_msg
+            # Store the ret_msg in the database as someone the user follows
 
         # if ret_msg:
         #     message = "Your message: {}".format(ret_msg)
 
-        final_ret = {"status": "Success", "message": message, "posts": posts}
+        final_ret = {"status": "Success", "message": message, "posts": posts, "users": users}
 
         return final_ret
         
