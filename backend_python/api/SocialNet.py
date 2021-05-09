@@ -101,7 +101,8 @@ class Database(Resource):
         self.data[post.user].add_post(post)
 
 class SocialNet(Resource):
-    loggedIn = False # Get this value from the databse
+    def __init__(self):
+        self.loggedIn = False # Get this value from the databse
 
     # def getLogin(self):
     #     #get from database the login status
@@ -153,8 +154,8 @@ class SocialNet(Resource):
                 # so, you need to check the string before the period and after the period and return "ValidCombo" 
                 # if the databse says that they are a valid combination
                     current_user_name = result[0].Username
-                    updt = update_login_status('Accounts', current_user_name, True) #update login status to true
-                    loggedIn = True
+                    # updt = update_login_status('Accounts', current_user_name, True) #update login status to true
+                    self.loggedIn = True
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
