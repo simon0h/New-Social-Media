@@ -49,7 +49,7 @@ export default function CreateAccount() {
     console.log(uniqueUsername);
     console.log(passwordsMatch);
     if (uniqueUsername && passwordsMatch) {
-      axios.post("http://localhost:5000/flask/hello", {type: "newAccountCreated"})
+      axios.post("http://localhost:5000/flask/hello", {type: "newAccountCreated"}) // add payload
         .then(response => {
           console.log("Backend: ", response.data.message);
         }

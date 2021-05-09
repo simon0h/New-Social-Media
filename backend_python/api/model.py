@@ -85,6 +85,9 @@ def update_login_status(tableName, Username, updateValue):
     )
     conn.execute(stmt)
 
+Foo = meta.tables['Accounts']
+ins = Foo.insert({'Username':'r', 'Password':'r'})
+conn.execute(ins)
 
 # #hard code of inserting a user row to Accounts
 # Foo = meta.tables['Accounts']

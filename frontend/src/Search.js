@@ -51,7 +51,8 @@ export default class Search extends Component {
     //let usersWithKey;
     axios.post("http://localhost:5000/flask/hello", {type: "getUsers"})
       .then(response => {
-        const users = response.data.users
+        console.log("Backend: users - ", response.data.message);
+        const users = response.data.users;
         const usersWithKey = users.map(this.setKeys);
         this.setState({data: usersWithKey});
         console.log("Backend: users - ", users);

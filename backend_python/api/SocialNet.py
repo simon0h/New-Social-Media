@@ -103,6 +103,9 @@ class Database(Resource):
 class SocialNet(Resource):
     loggedIn = False # Get this value from the databse
 
+    # def getLogin(self):
+    #     #get from database the login status
+
     def get(self):
         # return {
         # 'resultStatus': 'SUCCESS',
@@ -153,7 +156,7 @@ class SocialNet(Resource):
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
-                    
+
         if request_type == "checkUniqueUsername": 
             result = search_username('Accounts', ret_msg)
             if len(result) == 0: # Check with the database
@@ -177,7 +180,6 @@ class SocialNet(Resource):
             Foo2 = meta.tables['Profile'] #add profile row
             ins2 = Foo2.insert({'Username':ret_msg[0]})
             conn.execute(ins2)
-            
             message = "new account created"
         
         if request_type == "getFollowingTextPosts":
