@@ -41,7 +41,7 @@ export default class Search extends Component {
     //console.log("User: ", user.key);
     axios.post("http://localhost:5000/flask/hello", {type: "follow", message: user.key})
       .then(response => {
-        console.log("Following ", response.data.message);
+        console.log("Backend: now following - ", response.data.message);
       })
   }
 
@@ -52,10 +52,9 @@ export default class Search extends Component {
     axios.post("http://localhost:5000/flask/hello", {type: "getUsers"})
       .then(response => {
         const users = response.data.users
-        //console.log(users);
         const usersWithKey = users.map(this.setKeys);
-        //console.log(usersWithKey);
         this.setState({data: usersWithKey});
+        console.log("Backend: users - ", users);
       })
     // const usersWithKey = users.map(this.setKeys);
     // console.log("Key: ", usersWithKey);

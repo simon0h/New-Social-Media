@@ -9,13 +9,14 @@ export default class Profile extends Component {
     this.state = {backgroundColor: "white", customize: false, font: "Poppins", posts: []};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.allImgPosts = this.allImgPosts.bind(this);
   }
 
   componentDidMount = () => {
     axios.post("http://localhost:5000/flask/hello", {type: "getMyTextPosts"})
       .then(response => {
-        this.setState({posts: response.data.posts})
-        console.log(this.state.posts);
+        this.setState({posts: response.data.arr})
+        console.log("Backend: my text posts - ", this.state.arr);
       })
   }
 
@@ -48,6 +49,23 @@ export default class Profile extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+  }
+  allImgPosts() {
+    let imgObj = [];
+    imgObj.push(this.state.imgPosts);
+    return (
+      <div className="multipleImages">
+        {(imgObj || []).map(url => (
+            <img src={url} alt="..." style={{
+              borderRadius:"10px",
+              height:"auto",
+              left:"30px",
+              marginTop:"20px",
+              marginRight:"20px",
+              width:"500px"}}/>
+        ))}
+      </div>
+    )
   }
 
   render () {
@@ -117,6 +135,7 @@ export default class Profile extends Component {
           <div style={fontChoice}>
             {allTextPosts}
           </div>
+          {this.allImgPosts()}
         </div>
       </React.Fragment>
     )

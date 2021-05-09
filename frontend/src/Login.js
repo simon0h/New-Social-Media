@@ -23,12 +23,10 @@ export default function Login({setToken}) {
     e.preventDefault();
     let payload = username + "." + password;
 
-    axios.post("http://localhost:5000/flask/hello", {type: "both", message: payload})
+    axios.post("http://localhost:5000/flask/hello", {type: "checkLogin", message: payload})
       .then(response => {
-        console.log("Both: ", response.data.message);
+        console.log("Backend: ", response.data.message);
         if (response.data.message === "ValidCombo") {
-          console.log("Valid");
-          //validLogin.setLoginStatus(true);
           setLoggedIn(true);
           setToken(true);
         }

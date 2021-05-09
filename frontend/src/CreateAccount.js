@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import "./AccountManagement.css";
 import axios from "axios";
 
@@ -25,7 +25,7 @@ export default function CreateAccount() {
       setValidUsername(true);
       axios.post("http://localhost:5000/flask/hello", {type: "checkUniqueUsername", message: username})
         .then(response => {
-          console.log("unique username: ", response.data.message);
+          console.log("Backend: username is ", response.data.message);
           if (response.data.message === "unique") {
             setUniqueUsername(true);
           }
@@ -38,7 +38,7 @@ export default function CreateAccount() {
       let payload = password + "." + confirmPassword;
       axios.post("http://localhost:5000/flask/hello", {type: "checkValidPassword", message: payload})
         .then(response => {
-          console.log("matching password: ", response.data.message);
+          console.log("Backend: passwords ", response.data.message);
           if (response.data.message === "match") {
             setPasswordsMatch(true);
           }
@@ -51,7 +51,7 @@ export default function CreateAccount() {
     if (uniqueUsername && passwordsMatch) {
       axios.post("http://localhost:5000/flask/hello", {type: "newAccountCreated"})
         .then(response => {
-          console.log(response.data.message);
+          console.log("Backend: ", response.data.message);
         }
       )}
   }

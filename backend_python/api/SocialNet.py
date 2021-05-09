@@ -2,8 +2,11 @@
 import time
 import json
 import warnings
+import array
+import os
 from flask_restful import Api, Resource, reqparse
 from os import listdir
+from PIL import Image
 
 class Post(Resource):
     def __init__(self, user="", description="", is_video=False, file=None, post_time=None, data_dict=None):
@@ -102,79 +105,97 @@ class SocialNet(Resource):
     loggedIn = True # Get this value from the databse
 
     def get(self):
-        # return {
-        # 'resultStatus': 'SUCCESS',
-        # 'message': "In Python"
-        # }
-        if (self.loggedIn):# Check with the database to see if the user is logged in
+        if (self.loggedIn):
+            # Check with the database to see if the user is logged in
             return {'loginStatus': True}
         else:
             return {'loginStatus': False} 
 
     def post(self):
-        #print(self)
         parser = reqparse.RequestParser()
         parser.add_argument('type', type=str)
         parser.add_argument('message', type=str)
-
         args = parser.parse_args()
-
-        #print(args)
-        # note, the post req from frontend needs to match the strings here (e.g. 'type and 'message')
 
         request_type = args['type']
         request_json = args['message']
-        # ret_status, ret_msg = ReturnData(request_type, request_json)
-        # currently just returning the req straight
         ret_status = request_type
         ret_msg = request_json
+
         message = "No message"
         posts = []
         users = []
 
         if request_type == "images":
             message = loadedImages(self.path)
-        if request_type == "both":
-            if ret_msg[0] == "a" and ret_msg[2] == "a":# Check with the database for valid login
+        if request_type == "checkLogin":
+            if ret_msg[0] == "a" and ret_msg[2] == "a":
+                # The if statement should check with the database for valid login combo
+                # Currently, if the username is "a" and password is "a", it is true
                 # ret_msg is a string in the format of "username"."password"
                 # so, you need to check the string before the period and after the period and return "ValidCombo" 
                 # if the databse says that they are a valid combination
                 message = "ValidCombo"
         if request_type == "checkUniqueUsername":
-            if ret_msg == "a":# Check with the database
+            if ret_msg == "a":
+                # The if statement should check with the database for valid unique username and store it if it is unique
+                # Username is not allowed to have a period
+                # Currently, if the username is "a", it is not unique
                 message = "not unique"
             else:
                 message = "unique"
         if request_type == "checkValidPassword":
-            if ret_msg[0] ==  ret_msg[2]: # Check with the database
+            if ret_msg[0] ==  ret_msg[2]: 
+                # The if statement should loop over the ret_msg to check if they match and store it if they match
                 # ret_msg is a string in the format of "password"."passwordConfirm"
-                # so, you need to check the string before the period and after the period and return "match" if they match
+                # So, you need to check the string before the period and after the period and return "match" if they match
                 message = "match"
             else:
                 message = "no match"
         if request_type == "newAccountCreated":
             message = "new account created"
+
         if request_type == "getFollowingTextPosts":
-            posts = ["Text post 1", "Text post 2"] # Check with the backend for all text posts
+            # Check with the databse for all text posts that people I follow have posted
+            posts = ["Text post 1", "Text post 2"]
         if request_type == "getMyTextPosts":
-            posts = ["My text post 1", "My text post 2"] # Check with the backend for all text posts
+            # Check with the backend for all text posts that I have posted
+            posts = ["My text post 1", "My text post 2"]
+        
+        if request_type == "getFollowingImagePosts":
+            # Get the URLs of all the image posts that people I follow have posted
+            # Append the URL to loadedImages
+            path = "./waterfall.jpg"        
+            loadedImages = []
+            loadedImages.append(os.path.abspath("./waterfall.jpg"))
+            posts = loadedImages
+        if request_type == "getMyImagePosts":
+            # Get the URLs of all the image posts that I have posted
+            # Append the URL to loadedImages
+            path = "./waterfall.jpg"        
+            loadedImages = []
+            loadedImages.append(os.path.abspath("./waterfall.jpg"))
+            posts = loadedImages
+
         if request_type == "newTextPost":
-            print(ret_msg)
             posts.append(ret_msg)
-            # Store the ret_msg in database
-            # Return the newTextPost
+            # Store ret_msg in database
+            message = ret_msg
+        if request_type == "newImages":
+            message = ret_msg
+
         if request_type == "getUsers":
             users = ["user1", "user2", "user3"]
-            # Get an array of all users from the database
+            # Get an array of all users from the database and set it to users
         if request_type == "follow":
-            # send to databse code
+            # ret_msg is the username of the person that I selected in Search
+            # Store in database that I have followed the person
             message = ret_msg
-            # Store the ret_msg in the database as someone the user follows
 
         # if ret_msg:
         #     message = "Your message: {}".format(ret_msg)
 
-        final_ret = {"status": "Success", "message": message, "posts": posts, "users": users}
+        final_ret = {"status": "Success", "message": message, "arr": posts, "users": users}
 
         return final_ret
         
