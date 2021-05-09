@@ -9,7 +9,7 @@ import sqlalchemy as db
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Boolean, String, ForeignKey, Time
 from sqlalchemy.sql import select, update
 
-engine = create_engine('postgresql://postgres:postgresql@localhost/postgres')
+engine = create_engine('postgresql://postgres:postgresql@localhost/postgres') #local host address (//USERNAME:PASSWORD@HOSTNAME/DATABASENAME)
 meta = MetaData()
 
 accounts = Table(
