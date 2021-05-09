@@ -101,7 +101,7 @@ class Database(Resource):
         self.data[post.user].add_post(post)
 
 class SocialNet(Resource):
-    loggedIn = True # Get this value from the databse
+    loggedIn = False # Get this value from the databse
 
     def get(self):
         # return {
@@ -129,29 +129,32 @@ class SocialNet(Resource):
         # ret_status, ret_msg = ReturnData(request_type, request_json)
         # currently just returning the req straight
         ret_status = request_type
-        ret_msg = request_json
+        ret_msg = request_json.split('.') #split string by period
         message = "No message"
+        current_user_name = ''
         posts = []
         users = []
 
         if request_type == "images":
             message = loadedImages(self.path)
             
-        if request_type == "checkLogin":
+        if request_type == "both":
             result = search_username('Accounts', ret_msg[0])
             if len(result) == 0:
                 message = "No existing user found"
             else:
                 pswd = result[0].Password
-                if ret_msg[2] == pswd:# Check with the database for valid login
+                if ret_msg[1] == pswd:# Check with the database for valid login
                 # ret_msg is a string in the format of "username"."password"
                 # so, you need to check the string before the period and after the period and return "ValidCombo" 
                 # if the databse says that they are a valid combination
+                    current_user_name = result[0].Username
+                    updt = update_login_status('Accounts', current_user_name, True) #update login status to true
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
                     
-        if request_type == "checkUniqueUsername": #username is always unique
+        if request_type == "checkUniqueUsername": 
             result = search_username('Accounts', ret_msg)
             if len(result) == 0: # Check with the database
                 message = "unique"
@@ -159,68 +162,62 @@ class SocialNet(Resource):
                 message = "not unique"
                 
         if request_type == "checkValidPassword":
-            if ret_msg[0] ==  ret_msg[2]: # Check with the database
+            if ret_msg[0] ==  ret_msg[1]: # Check with the database
                 # ret_msg is a string in the format of "password"."passwordConfirm"
                 # so, you need to check the string before the period and after the period and return "match" if they match
                 message = "match"
             else:
                 message = "no match"
         
-        if request_type == "newAccountCreated":
-            Foo = meta.tables['Accounts']
-            ins = Foo.insert({'Username':ret_msg[0], 'Password':ret_msg[2]})
-            conn.execute(ins)
+        if request_type == "newAccountCreated": #created and logged in at the same time
+            Foo1 = meta.tables['Accounts'] #add accounts row
+            ins1 = Foo1.insert({'Username':ret_msg[0], 'Password':ret_msg[1], 'LoginStatus'=True})
+            conn.execute(ins1)
+            
+            Foo2 = meta.tables['Profile'] #add profile row
+            ins2 = Foo2.insert({'Username':ret_msg[0]})
+            conn.execute(ins2)
+            
             message = "new account created"
         
         if request_type == "getFollowingTextPosts":
             result = search_username('Feed', ret_msg) #ret_msg is the followed user
-            posts = [r.Text for r in result] # Check with the backend for all text posts
-            print(posts)
-
+            posts = [r.Text[0] for r in result] # Check with the backend for all text posts
+        
         if request_type == "getMyTextPosts":
-            result = search_username('Feed', ret_msg) #ret_msg is my username
-            posts = [r.Text for r in result] 
-
-        if request_type == "getMyImagePosts":
-            # Get the URLs of all the image posts that I have posted
-            # Append the URL to loadedImages
-            path = "./waterfall.jpg"        
-            loadedImages = []
-            loadedImages.append(os.path.abspath("./waterfall.jpg"))
+            result = search_username('Feed', current_user_name) #ret_msg is my username
+            posts = [r.Text[0] for r in result] 
         
         if request_type == "newTextPost":
             # print(ret_msg)
             # posts.append(ret_msg[2])
             
             Foo = meta.tables['Feed']
-            ins = Foo.insert({'Username':ret_msg[0], 'Text':ret_msg[2]})
+            ins = Foo.insert({'Username':current_user_name, 'Text':ret_msg})
             conn.execute(ins)
             message = "new text post added"
             # Store the ret_msg in database
             # Return the newTextPost
-
-        if request_type == "newImages":
-            message = ret_msg
         
         if request_type == "getUsers":
             table = meta.tables['Accounts']
             st = select(table.c.Username)
-            users = [r for r in conn.execute(st)]
+            users = [r[0] for r in conn.execute(st)]
             message = "get user list"
             # Get an array of all users from the database
         
         if request_type == "follow":
             # send to databse code
             #ret_msg[0] is the username, ret_msg[2] is the one the user follows
-            updt = update_username('Profile', ret_msg[0], ret_msg[2])
-            message = ret_msg[2]
+            updt = update_username('Profile', current_user_name, ret_msg)
+            message = ret_msg
             
             # Store the ret_msg in the database as someone the user follows
 
         # if ret_msg:
         #     message = "Your message: {}".format(ret_msg)
 
-        final_ret = {"status": "Success", "message": message, "arr": posts, "users": users}
+        final_ret = {"status": "Success", "message": message, "posts": posts, "users": users}
 
         return final_ret
         
