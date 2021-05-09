@@ -159,7 +159,7 @@ class SocialNet(Resource):
                     message = "UnvalidCombo"
 
         if request_type == "checkUniqueUsername": 
-            result = search_username('Accounts', ret_msg)
+            result = search_username('Accounts', ret_msg[0])
             if len(result) == 0: # Check with the database
                 message = "unique"
             else:
@@ -184,7 +184,7 @@ class SocialNet(Resource):
             message = "new account created"
         
         if request_type == "getFollowingTextPosts":
-            result = search_username('Feed', ret_msg) #ret_msg is the followed user
+            result = search_username('Feed', ret_msg[0]) #ret_msg is the followed user
             posts = [r.Text[0] for r in result] # Check with the backend for all text posts
         
         if request_type == "getMyTextPosts":
@@ -196,7 +196,7 @@ class SocialNet(Resource):
             # posts.append(ret_msg[2])
             
             Foo = meta.tables['Feed']
-            ins = Foo.insert({'Username':current_user_name, 'Text':ret_msg})
+            ins = Foo.insert({'Username':current_user_name, 'Text':ret_msg[0]})
             conn.execute(ins)
             message = "new text post added"
             # Store the ret_msg in database
@@ -212,8 +212,8 @@ class SocialNet(Resource):
         if request_type == "follow":
             # send to databse code
             #ret_msg[0] is the username, ret_msg[2] is the one the user follows
-            updt = update_username('Profile', current_user_name, ret_msg)
-            message = ret_msg
+            updt = update_username('Profile', current_user_name, ret_msg[0])
+            message = ret_msg[0]
             
             # Store the ret_msg in the database as someone the user follows
 
