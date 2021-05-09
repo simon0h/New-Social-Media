@@ -2,11 +2,10 @@
 import time
 import json
 import warnings
-import array
-import os
+from model import *
 from flask_restful import Api, Resource, reqparse
 from os import listdir
-from PIL import Image
+from flask_sqlalchemy import SQLAlchemy
 
 class Post(Resource):
     def __init__(self, user="", description="", is_video=False, file=None, post_time=None, data_dict=None):
@@ -105,109 +104,124 @@ class SocialNet(Resource):
     loggedIn = True # Get this value from the databse
 
     def get(self):
-        if (self.loggedIn):
-            # Check with the database to see if the user is logged in
+        # return {
+        # 'resultStatus': 'SUCCESS',
+        # 'message': "In Python"
+        # }
+        if (self.loggedIn):# Check with the database to see if the user is logged in
             return {'loginStatus': True}
         else:
             return {'loginStatus': False} 
 
     def post(self):
+        #print(self)
         parser = reqparse.RequestParser()
         parser.add_argument('type', type=str)
         parser.add_argument('message', type=str)
+
         args = parser.parse_args()
+
+        #print(args)
+        # note, the post req from frontend needs to match the strings here (e.g. 'type and 'message')
 
         request_type = args['type']
         request_json = args['message']
+        # ret_status, ret_msg = ReturnData(request_type, request_json)
+        # currently just returning the req straight
         ret_status = request_type
         ret_msg = request_json
-
         message = "No message"
         posts = []
         users = []
 
         if request_type == "images":
             message = loadedImages(self.path)
-        if request_type == "checkLogin":
-            if ret_msg[0] == "a" and ret_msg[2] == "a":
-                # The if statement should check with the database for valid login combo
-                # Currently, if the username is "a" and password is "a", it is true
+            
+        if request_type == "both":
+            result = search_username('Accounts', ret_msg[0])
+            if len(result) == 0:
+                message = "No existing user found"
+            else:
+                pswd = result[0].Password
+                if ret_msg[2] == pswd:# Check with the database for valid login
                 # ret_msg is a string in the format of "username"."password"
                 # so, you need to check the string before the period and after the period and return "ValidCombo" 
                 # if the databse says that they are a valid combination
-                message = "ValidCombo"
-        if request_type == "checkUniqueUsername":
-            if ret_msg == "a":
-                # The if statement should check with the database for valid unique username and store it if it is unique
-                # Username is not allowed to have a period
-                # Currently, if the username is "a", it is not unique
-                message = "not unique"
-            else:
+                    message = "ValidCombo"
+                else:
+                    message = "UnvalidCombo"
+                    
+        if request_type == "checkUniqueUsername": #username is always unique
+            result = search_username('Accounts', ret_msg)
+            if len(result) == 0: # Check with the database
                 message = "unique"
+            else:
+                message = "not unique"
+                
         if request_type == "checkValidPassword":
-            if ret_msg[0] ==  ret_msg[2]: 
-                # The if statement should loop over the ret_msg to check if they match and store it if they match
+            if ret_msg[0] ==  ret_msg[2]: # Check with the database
                 # ret_msg is a string in the format of "password"."passwordConfirm"
-                # So, you need to check the string before the period and after the period and return "match" if they match
+                # so, you need to check the string before the period and after the period and return "match" if they match
                 message = "match"
             else:
                 message = "no match"
-        if request_type == "newAccountCreated":
-            message = "new account created"
-
-        if request_type == "getFollowingTextPosts":
-            # Check with the databse for all text posts that people I follow have posted
-            posts = ["Text post 1", "Text post 2"]
-        if request_type == "getMyTextPosts":
-            # Check with the backend for all text posts that I have posted
-            posts = ["My text post 1", "My text post 2"]
         
-        if request_type == "getFollowingImagePosts":
-            # Get the URLs of all the image posts that people I follow have posted
-            # Append the URL to loadedImages
-            path = "./waterfall.jpg"        
-            loadedImages = []
-            loadedImages.append(os.path.abspath("./waterfall.jpg"))
-            posts = loadedImages
-        if request_type == "getMyImagePosts":
-            # Get the URLs of all the image posts that I have posted
-            # Append the URL to loadedImages
-            path = "./waterfall.jpg"        
-            loadedImages = []
-            loadedImages.append(os.path.abspath("./waterfall.jpg"))
-            posts = loadedImages
-
+        if request_type == "newAccountCreated":
+            Foo = meta.tables['Accounts']
+            ins = Foo.insert({'Username':ret_msg[0], 'Password':ret_msg[2]})
+            conn.execute(ins)
+            message = "new account created"
+        
+        if request_type == "getFollowingTextPosts":
+            result = search_username('Feed', ret_msg) #ret_msg is the followed user
+            posts = [r.Text for r in result] # Check with the backend for all text posts
+        
+        if request_type == "getMyTextPosts":
+            result = search_username('Feed', ret_msg) #ret_msg is my username
+            posts = [r.Text for r in result] 
+        
         if request_type == "newTextPost":
-            posts.append(ret_msg)
-            # Store ret_msg in database
-            message = ret_msg
-        if request_type == "newImages":
-            message = ret_msg
-
+            # print(ret_msg)
+            # posts.append(ret_msg[2])
+            
+            Foo = meta.tables['Feed']
+            ins = Foo.insert({'Username':ret_msg[0], 'Text':ret_msg[2]})
+            conn.execute(ins)
+            message = "new text post added"
+            # Store the ret_msg in database
+            # Return the newTextPost
+        
         if request_type == "getUsers":
-            users = ["user1", "user2", "user3"]
-            # Get an array of all users from the database and set it to users
+            table = meta.tables['Accounts']
+            st = select(table.c.Username)
+            users = [r for r in conn.execute(st)]
+            message = "get user list"
+            # Get an array of all users from the database
+        
         if request_type == "follow":
-            # ret_msg is the username of the person that I selected in Search
-            # Store in database that I have followed the person
-            message = ret_msg
+            # send to databse code
+            #ret_msg[0] is the username, ret_msg[2] is the one the user follows
+            updt = update_username('Profile', ret_msg[0], ret_msg[2])
+            message = ret_msg[2]
+            
+            # Store the ret_msg in the database as someone the user follows
 
         # if ret_msg:
         #     message = "Your message: {}".format(ret_msg)
 
-        final_ret = {"status": "Success", "message": message, "arr": posts, "users": users}
+        final_ret = {"status": "Success", "message": message, "posts": posts, "users": users}
 
         return final_ret
         
         
-db = Database()
-db.add_profile(Profile(name="y"))
-db.add_profile(Profile(name="y2"))
-db.add_profile(Profile(name="y3", friends=['y']))
+# db = Database()
+# db.add_profile(Profile(name="y"))
+# db.add_profile(Profile(name="y2"))
+# db.add_profile(Profile(name="y3", friends=['y']))
 
-db.add_profile_post(Post(user="y", description="haha"))
-db.save_data("1.txt")
-p = Profile()
+# db.add_profile_post(Post(user="y", description="haha"))
+# db.save_data("1.txt")
+# p = Profile()
 
-db2 = Database("1.txt")
-#print(db.get_data_dict())
+# db2 = Database("1.txt")
+# #print(db.get_data_dict())
