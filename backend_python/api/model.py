@@ -6,10 +6,10 @@ Created on Sun May  9 14:25:29 2021
 """
 
 import sqlalchemy as db
-from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, ForeignKey, Time
+from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Boolean, String, ForeignKey, Time
 from sqlalchemy.sql import select, update
 
-engine = create_engine('postgresql://postgres:1234@localhost/postgres')
+engine = create_engine('postgresql://postgres:postgresql@localhost/postgres')
 meta = MetaData()
 
 accounts = Table(
@@ -21,7 +21,8 @@ accounts = Table(
     Column('Images', String),
     Column('Followed', String),
     Column('Font', String),
-    Column('Color', Integer)
+    Column('Color', Integer),
+    Column('LoginStatus', Boolean)
 )
 
 feed = Table(
@@ -45,11 +46,11 @@ profile = Table(
     Column('Images', String)
 )
 
-test_t = Table(
-    'test_t', meta,
-    Column('name', String),
-    Column('id', String),
-)
+# test_t = Table(
+#     'test_t', meta,
+#     Column('name', String),
+#     Column('id', String),
+# )
 
 meta.create_all(engine)
 conn = engine.connect()
@@ -75,14 +76,25 @@ def update_username(tableName, Username, updateValue):
     )
     conn.execute(stmt)
 
+def update_login_status(tableName, Username, updateValue):
+    table = meta.tables[tableName]
+    stmt = (
+        update(table).
+        where(table.c.Username == Username).
+        values(LoginStatus=updateValue)
+    )
+    conn.execute(stmt)
 
-Foo = meta.tables['Accounts']
-ins = Foo.insert({'Username':'test3', 'Password':'123'})
-conn.execute(ins)
 
-# Foo1 = meta.tables['Accounts']
-# ins1 = Foo1.insert({'Username':'libo', 'Password':'123'})
-# conn.execute(ins1)
+# #hard code of inserting a user row to Accounts
+# Foo = meta.tables['Accounts']
+# ins = Foo.insert({'Username':'libo', 'Password':'123'})
+# conn.execute(ins)
+
+# #hard code of deleting a specific user row using its username
+# Foo = meta.tables['Accounts']
+# stmt = Foo.delete().where(Foo.c.Username == 'libo')
+# conn.execute(stmt)
     
 # Foo = meta.tables['test_t']
 # result = conn.execute(select(Foo).where(Foo.c.name == 'libo'))
@@ -91,3 +103,8 @@ conn.execute(ins)
 #      print(t)
 
 # print(census.columns.keys())
+
+# table = meta.tables['Accounts']
+# st = select(table.c.Username)
+# users = [r[0] for r in conn.execute(st)]
+# print(users)
