@@ -9,7 +9,7 @@ import sqlalchemy as db
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, String, ForeignKey, Time
 from sqlalchemy.sql import select, update
 
-engine = create_engine('postgresql://postgres:postgresql@localhost/postgres')
+engine = create_engine('postgresql://postgres:1234@localhost/postgres')
 meta = MetaData()
 
 accounts = Table(
@@ -77,12 +77,12 @@ def update_username(tableName, Username, updateValue):
 
 
 Foo = meta.tables['Accounts']
-ins = Foo.insert({'Username':'libo', 'Password':'123'})
+ins = Foo.insert({'Username':'test3', 'Password':'123'})
 conn.execute(ins)
 
-Foo1 = meta.tables['Accounts']
-ins1 = Foo1.insert({'Username':'libo', 'Password':'123'})
-conn.execute(ins1)
+# Foo1 = meta.tables['Accounts']
+# ins1 = Foo1.insert({'Username':'libo', 'Password':'123'})
+# conn.execute(ins1)
     
 # Foo = meta.tables['test_t']
 # result = conn.execute(select(Foo).where(Foo.c.name == 'libo'))

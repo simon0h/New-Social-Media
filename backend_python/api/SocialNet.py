@@ -2,7 +2,7 @@
 import time
 import json
 import warnings
-from model import *
+from api.model import *
 from flask_restful import Api, Resource, reqparse
 from os import listdir
 from flask_sqlalchemy import SQLAlchemy
@@ -137,7 +137,7 @@ class SocialNet(Resource):
         if request_type == "images":
             message = loadedImages(self.path)
             
-        if request_type == "both":
+        if request_type == "checkLogin":
             result = search_username('Accounts', ret_msg[0])
             if len(result) == 0:
                 message = "No existing user found"
@@ -175,10 +175,18 @@ class SocialNet(Resource):
         if request_type == "getFollowingTextPosts":
             result = search_username('Feed', ret_msg) #ret_msg is the followed user
             posts = [r.Text for r in result] # Check with the backend for all text posts
-        
+            print(posts)
+
         if request_type == "getMyTextPosts":
             result = search_username('Feed', ret_msg) #ret_msg is my username
             posts = [r.Text for r in result] 
+
+        if request_type == "getMyImagePosts":
+            # Get the URLs of all the image posts that I have posted
+            # Append the URL to loadedImages
+            path = "./waterfall.jpg"        
+            loadedImages = []
+            loadedImages.append(os.path.abspath("./waterfall.jpg"))
         
         if request_type == "newTextPost":
             # print(ret_msg)
@@ -190,6 +198,9 @@ class SocialNet(Resource):
             message = "new text post added"
             # Store the ret_msg in database
             # Return the newTextPost
+
+        if request_type == "newImages":
+            message = ret_msg
         
         if request_type == "getUsers":
             table = meta.tables['Accounts']
@@ -209,7 +220,7 @@ class SocialNet(Resource):
         # if ret_msg:
         #     message = "Your message: {}".format(ret_msg)
 
-        final_ret = {"status": "Success", "message": message, "posts": posts, "users": users}
+        final_ret = {"status": "Success", "message": message, "arr": posts, "users": users}
 
         return final_ret
         
