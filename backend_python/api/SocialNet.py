@@ -141,12 +141,13 @@ class SocialNet(Resource):
         if request_type == "images":
             message = loadedImages(self.path)
             
-        if request_type == "both":
+        if request_type == "checkLogin":
             result = search_username('Accounts', ret_msg[0])
             if len(result) == 0:
                 message = "No existing user found"
             else:
                 pswd = result[0].Password
+
                 if ret_msg[1] == pswd:# Check with the database for valid login
                 # ret_msg is a string in the format of "username"."password"
                 # so, you need to check the string before the period and after the period and return "ValidCombo" 
@@ -175,7 +176,7 @@ class SocialNet(Resource):
         
         if request_type == "newAccountCreated": #created and logged in at the same time
             Foo1 = meta.tables['Accounts'] #add accounts row
-            ins1 = Foo1.insert({'Username':ret_msg[0], 'Password':ret_msg[1], 'LoginStatus':True})
+            ins1 = Foo1.insert({'Username':ret_msg[0], 'Password':ret_msg[1], 'LoginStatus': True})
             conn.execute(ins1)
             
             Foo2 = meta.tables['Profile'] #add profile row

@@ -9,7 +9,7 @@ import sqlalchemy as db
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Boolean, String, ForeignKey, Time
 from sqlalchemy.sql import select, update
 
-engine = create_engine('postgresql://postgres:postgresql@localhost/postgres') #local host address (//USERNAME:PASSWORD@HOSTNAME/DATABASENAME)
+engine = create_engine('postgresql://postgres:1234@localhost/postgres') #local host address (//USERNAME:PASSWORD@HOSTNAME/DATABASENAME)
 meta = MetaData()
 
 accounts = Table(
@@ -86,8 +86,8 @@ def update_login_status(tableName, Username, updateValue):
     conn.execute(stmt)
 
 Foo = meta.tables['Accounts']
-ins = Foo.insert({'Username':'r', 'Password':'r'})
-conn.execute(ins)
+# ins = Foo.insert({'Username':'rr', 'Password':'rr'})
+# conn.execute(ins)
 
 # #hard code of inserting a user row to Accounts
 # Foo = meta.tables['Accounts']
