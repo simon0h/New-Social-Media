@@ -153,6 +153,7 @@ class SocialNet(Resource):
                 # if the databse says that they are a valid combination
                     current_user_name = result[0].Username
                     updt = update_login_status('Accounts', current_user_name, True) #update login status to true
+                    loggedIn = True
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
@@ -174,7 +175,7 @@ class SocialNet(Resource):
         
         if request_type == "newAccountCreated": #created and logged in at the same time
             Foo1 = meta.tables['Accounts'] #add accounts row
-            ins1 = Foo1.insert({'Username':ret_msg[0], 'Password':ret_msg[1], 'LoginStatus'=True})
+            ins1 = Foo1.insert({'Username':ret_msg[0], 'Password':ret_msg[1], 'LoginStatus':True})
             conn.execute(ins1)
             
             Foo2 = meta.tables['Profile'] #add profile row
