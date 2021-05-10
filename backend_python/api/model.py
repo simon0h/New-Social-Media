@@ -84,11 +84,11 @@ def update_entry(tableName, Username, updateColumn, updateValue):
     )
     conn.execute(stmt)
 
-def return_entry(tableName, Username, returnColumn):
-    table = meta.tables[tableName]
-    st = select(table).where(table.c.Username == Username)
-    result = [getattr(r.returnColumn) for r in conn.execute(st)]
-    return result
+# def return_entry(tableName, Username, returnColumn):
+#     table = meta.tables[tableName]
+#     st = select(table).where(table.c.Username == Username)
+#     result = [getattr(r.returnColumn) for r in conn.execute(st)]
+#     return result
 
 def update_login_status(tableName, Status, updateValue):
     table = meta.tables[tableName]

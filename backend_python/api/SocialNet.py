@@ -132,7 +132,10 @@ class SocialNet(Resource):
         # ret_status, ret_msg = ReturnData(request_type, request_json)
         # currently just returning the req straight
         ret_status = request_type
-        ret_msg = request_json.split('.') #split string by period
+        if (request_json is None):
+            ret_msg = ""
+        else:
+            ret_msg = request_json.split('.') #split string by period
         message = "No message"
         # current_user_name = ''
         posts = []
@@ -141,7 +144,7 @@ class SocialNet(Resource):
         if request_type == "images":
             message = loadedImages(self.path)
             
-        if request_type == "both":
+        if request_type == "checkLogin":
             result = search_username('Accounts', ret_msg[0])
             if len(result) == 0:
                 message = "No existing user found"
@@ -154,7 +157,7 @@ class SocialNet(Resource):
                     current_user_name = result[0].Username
                     # updt = update_login_status('Accounts', current_user_name, True) #update login status to true
                     update_login_status('LoginStatus', False, True)
-                    update_entry('LoginStatus', 'Username', current_user_name)
+                    update_entry('LoginStatus', 'Username', current_user_name, ret_msg[0])
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
