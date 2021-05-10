@@ -157,7 +157,7 @@ class SocialNet(Resource):
                     current_user_name = result[0].Username
                     # updt = update_login_status('Accounts', current_user_name, True) #update login status to true
                     update_login_status('LoginStatus', False, True)
-                    update_user_name('LoginStatus', False, current_user_name)
+                    update_user_name('LoginStatus', True, current_user_name)
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
@@ -187,9 +187,11 @@ class SocialNet(Resource):
             conn.execute(ins2)
             
             update_login_status('LoginStatus', False, True)
+            update_user_name('LoginStatus', True, ret_msg[0])
             message = "new account created"
         
         if request_type == "getFollowingTextPosts":
+            current_user_name = return_current_user('LoginStatus')
             lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
             post = []
             for koi in lst.following.split():
@@ -199,6 +201,7 @@ class SocialNet(Resource):
             return post
             
         if request_type == "getFollowingImagePosts":
+            current_user_name = return_current_user('LoginStatus')
             lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
             post = []
             for koi in lst.following.split('\t'):
