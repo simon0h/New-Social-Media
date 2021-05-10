@@ -216,12 +216,12 @@ class SocialNet(Resource):
         if request_type == "getMyTextPosts":
             current_user_name = return_current_user('LoginStatus')
             result = search_username('Feed', current_user_name) #ret_msg is my username
-            posts = [r.Text[0] for r in result]
+            posts = [r.Text for r in result]
             
         if request_type == "getMyImagePosts":
             current_user_name = return_current_user('LoginStatus')
             result = search_username('Feed', current_user_name) #ret_msg is my username
-            posts = [r.Images[0] for r in result] 
+            posts = [r.Images for r in result] 
             
         if request_type == "newImagePost":
             # print(ret_msg)

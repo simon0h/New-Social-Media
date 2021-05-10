@@ -44,7 +44,6 @@ export default class App extends PureComponent {
   }
 
   render() {
-    console.log("LOGIN STATUS =====", this.state.loggedIn);
     if (this.state.loggedIn) {
       return (
         <React.Fragment>

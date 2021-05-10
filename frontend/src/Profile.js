@@ -101,7 +101,7 @@ export default class Profile extends Component {
     let colorPicker;
     let fontPicker;
     let logOut;
-    let allTextPosts;
+    let allTextPosts = allPosts.map((p) => <div className="posts">{p}</div>);
 
     var mystyle = {
       backgroundColor: this.state.backgroundColor,
@@ -112,12 +112,6 @@ export default class Profile extends Component {
       fontFamily: this.state.font,
       fontSize: "25px"
     };
-
-    allTextPosts = (
-      <script>
-        {allPosts.map(p => <div className="posts" key={p}>{p}</div>)}
-      </script>
-    );
 
     logOut = (
       <button type="customize" onClick={this.logOut}>Log out</button>);
