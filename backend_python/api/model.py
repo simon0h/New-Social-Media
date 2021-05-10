@@ -102,8 +102,16 @@ def return_login_status(tableName):
 # return_login_status('LoginStatus')
 
 Foo = meta.tables['Accounts']
-# ins = Foo.insert({'Username':'rr', 'Password':'rr'})
-# conn.execute(ins)
+ins = Foo.insert({'Username':'rr', 'Password':'rr', 'Followed':'e'})
+conn.execute(ins)
+
+Foo2 = meta.tables['Accounts']
+ins2 = Foo2.insert({'Username':'e', 'Password':'e'})
+conn.execute(ins2)
+
+Foo3 = meta.tables['Feed']
+ins3 = Foo3.insert({'Username':'e', 'Text':'test post'})
+conn.execute(ins3)
 
 # #hard code of inserting a user row to Accounts
 # Foo = meta.tables['Accounts']
