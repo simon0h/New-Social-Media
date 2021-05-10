@@ -190,6 +190,26 @@ class SocialNet(Resource):
             update_login_status('LoginStatus', False, True)
             update_user_name('LoginStatus', True, ret_msg[0])
             message = "new account created"
+            
+                if request_type == "getMyColor":
+            current_user_name = return_current_user('LoginStatus')
+            color = return_entry('Accounts', current_user_name, 'Color')[0]
+            return color
+        
+        if request_type == "getMyFont":
+            current_user_name = return_current_user('LoginStatus')
+            color = return_entry('Accounts', current_user_name, 'Font')[0]
+            return color
+        
+        if request_type == "setMyColor":
+            current_user_name = return_current_user('LoginStatus')
+            update_entry('Accounts', current_user_name, 'Color', rst_msg[0])
+            update_entry('Profile', current_user_name, 'Color', rst_msg[0])
+            
+        if request_type == "setMyFont":
+            current_user_name = return_current_user('LoginStatus')
+            update_entry('Accounts', current_user_name, 'Font', rst_msg[0])
+            update_entry('Profile', current_user_name, 'Font', rst_msg[0])
         
         if request_type == "getFollowingTextPosts":
             current_user_name = return_current_user('LoginStatus')
