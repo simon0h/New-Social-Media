@@ -34,6 +34,10 @@ export default class App extends PureComponent {
     })
   }
 
+  logout = () => {
+    this.setState({loggedIn: false});
+  }
+
   setToken = (currUsername, status) => {
     this.setState({username: currUsername, loggedIn: status});
   }
@@ -92,7 +96,7 @@ export default class App extends PureComponent {
                 <Search username={this.state.username} />
               </Route>
               <Route path="/Profile">
-                <Profile username={this.state.username} />
+                <Profile username={this.state.username} logout={this.logout} />
               </Route>
             </Switch>
           </BrowserRouter>

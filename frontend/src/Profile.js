@@ -24,6 +24,7 @@ export default class Profile extends Component {
     //event.preventDefault();
     axios.post("http://localhost:5000/flask/hello", {type: "logOut"})
       .then(response => {
+        this.props.logout();
         console.log("Profile - Backend: logout - ", response.data.message);
       })
   }

@@ -117,7 +117,7 @@ class SocialNet(Resource):
             return {'loginStatus': False} 
 
     def post(self):
-        #print(self)
+        print("Logged in: ", self.loggedIn)
         parser = reqparse.RequestParser()
         parser.add_argument('type', type=str)
         parser.add_argument('message', type=str)
@@ -157,7 +157,7 @@ class SocialNet(Resource):
                     current_user_name = result[0].Username
                     # updt = update_login_status('Accounts', current_user_name, True) #update login status to true
                     update_login_status('LoginStatus', False, True)
-                    update_entry('LoginStatus', 'Username', current_user_name, ret_msg[0])
+                    update_user_name('LoginStatus', False, current_user_name)
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
@@ -197,7 +197,6 @@ class SocialNet(Resource):
             if (ret_msg is not None):
                 result = search_username('Feed', ret_msg[0]) #ret_msg is the followed user
                 posts = [r.Text[0] for r in result] # Check with the backend for all text posts
-        
 
         if request_type == "getMyTextPosts":
             current_user_name = return_current_user('LoginStatus')
@@ -227,8 +226,8 @@ class SocialNet(Resource):
             # send to databse code
             #ret_msg[0] is the username, ret_msg[2] is the one the user follows
             current_user_name = return_current_user('LoginStatus')
-            updt1 = update_username('Profile', current_user_name, ret_msg[0])
-            updt2 = update_username('Accounts', current_user_name, ret_msg[0])
+            updt1 = update_user_name('Profile', current_user_name, ret_msg[0])
+            updt2 = update_user_name('Accounts', current_user_name, ret_msg[0])
             message = ret_msg[0]
             
             # Store the ret_msg in the database as someone the user follows
