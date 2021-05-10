@@ -21,8 +21,7 @@ accounts = Table(
     Column('Images', String),
     Column('Followed', String),
     Column('Font', String),
-    Column('Color', Integer),
-    Column('LoginStatus', Boolean)
+    Column('Color', Integer)
 )
 
 feed = Table(
@@ -46,6 +45,10 @@ profile = Table(
     Column('Images', String)
 )
 
+login = Table(
+    'LoginStatus', meta,
+    Column('Status', Boolean))
+
 # test_t = Table(
 #     'test_t', meta,
 #     Column('name', String),
@@ -54,6 +57,10 @@ profile = Table(
 
 meta.create_all(engine)
 conn = engine.connect()
+
+if (len([1 for t in conn.execute(select(meta.tables['LoginStatus']))]) == 0):
+    ins = meta.tables['LoginStatus'].insert({'Status': False})
+    conn.execute(ins)
 
 
 
@@ -76,14 +83,23 @@ def update_username(tableName, Username, updateValue):
     )
     conn.execute(stmt)
 
-def update_login_status(tableName, Username, updateValue):
+def update_login_status(tableName, Status, updateValue):
     table = meta.tables[tableName]
     stmt = (
         update(table).
-        where(table.c.Username == Username).
-        values(LoginStatus=updateValue)
+        where(table.c.Status == Status).
+        values(Status=updateValue)
     )
     conn.execute(stmt)
+
+def return_login_status(tableName):
+    table = meta.tables[tableName]
+    st = select(table)
+    result = [r for r in conn.execute(st)]
+    return result[0][0]
+
+# update_login_status('LoginStatus', False, True)
+# return_login_status('LoginStatus')
 
 Foo = meta.tables['Accounts']
 # ins = Foo.insert({'Username':'rr', 'Password':'rr'})
