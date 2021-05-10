@@ -102,7 +102,7 @@ class Database(Resource):
 
 class SocialNet(Resource):
     loggedIn = return_login_status('LoginStatus') # Get this value from the databse
-
+    current_user_name = return_current_user('LoginStatus') # Get current user name
     # def getLogin(self):
     #     #get from database the login status
 
@@ -132,25 +132,21 @@ class SocialNet(Resource):
         # ret_status, ret_msg = ReturnData(request_type, request_json)
         # currently just returning the req straight
         ret_status = request_type
-        if (request_json is None):
-            ret_msg = ""
-        else:
-            ret_msg = request_json.split('.') #split string by period
+        ret_msg = request_json.split('.') #split string by period
         message = "No message"
-        current_user_name = ''
+        # current_user_name = ''
         posts = []
         users = []
 
         if request_type == "images":
             message = loadedImages(self.path)
             
-        if request_type == "checkLogin":
+        if request_type == "both":
             result = search_username('Accounts', ret_msg[0])
             if len(result) == 0:
                 message = "No existing user found"
             else:
                 pswd = result[0].Password
-
                 if ret_msg[1] == pswd:# Check with the database for valid login
                 # ret_msg is a string in the format of "username"."password"
                 # so, you need to check the string before the period and after the period and return "ValidCombo" 
@@ -158,7 +154,7 @@ class SocialNet(Resource):
                     current_user_name = result[0].Username
                     # updt = update_login_status('Accounts', current_user_name, True) #update login status to true
                     update_login_status('LoginStatus', False, True)
-                    # loggedIn = True
+                    update_entry('LoginStatus', 'Username', current_user_name)
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
@@ -201,12 +197,14 @@ class SocialNet(Resource):
         
 
         if request_type == "getMyTextPosts":
+            current_user_name = return_current_user('LoginStatus')
             result = search_username('Feed', current_user_name) #ret_msg is my username
             posts = [r.Text[0] for r in result] 
         
         if request_type == "newTextPost":
             # print(ret_msg)
             # posts.append(ret_msg[2])
+            current_user_name = return_current_user('LoginStatus')
             
             Foo = meta.tables['Feed']
             ins = Foo.insert({'Username':current_user_name, 'Text':ret_msg[0]})
@@ -225,7 +223,9 @@ class SocialNet(Resource):
         if request_type == "follow":
             # send to databse code
             #ret_msg[0] is the username, ret_msg[2] is the one the user follows
-            updt = update_username('Profile', current_user_name, ret_msg[0])
+            current_user_name = return_current_user('LoginStatus')
+            updt1 = update_username('Profile', current_user_name, ret_msg[0])
+            updt2 = update_username('Accounts', current_user_name, ret_msg[0])
             message = ret_msg[0]
             
             # Store the ret_msg in the database as someone the user follows
