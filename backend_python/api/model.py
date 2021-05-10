@@ -83,6 +83,15 @@ def update_entry(tableName, Username, updateColumn, updateValue):
         values(**{updateColumn:updateValue})
     )
     conn.execute(stmt)
+    
+def update_user_name(tableName, Status, updateValue):
+    table = meta.tables[tableName]
+    stmt = (
+        update(table).
+        where(table.c.Status == Status).
+        values(Username=updateValue)
+    )
+    conn.execute(stmt)
 
 # def return_entry(tableName, Username, returnColumn):
 #     table = meta.tables[tableName]
