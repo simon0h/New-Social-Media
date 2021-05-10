@@ -13,11 +13,18 @@ export default class Profile extends Component {
   }
 
   componentDidMount = () => {
-    let none = "none";
     axios.post("http://localhost:5000/flask/hello", {type: "getMyTextPosts"})
       .then(response => {
         this.setState({posts: response.data.arr})
-        console.log("Backend: my text posts - ", this.state.arr);
+        console.log("Profile - Backend: my text posts - ", this.state.arr);
+      })
+  }
+
+  logOut = () => {
+    //event.preventDefault();
+    axios.post("http://localhost:5000/flask/hello", {type: "logOut"})
+      .then(response => {
+        console.log("Profile - Backend: logout - ", response.data.message);
       })
   }
 
@@ -75,6 +82,7 @@ export default class Profile extends Component {
     let customizeButton;
     let colorPicker;
     let fontPicker;
+    let logOut;
     let allTextPosts;
 
     var mystyle = {
@@ -92,6 +100,9 @@ export default class Profile extends Component {
     //     {allPosts.map(p => <div className="posts" key={p}>{p}</div>)}
     //   </script>
     // );
+
+    logOut = (
+      <button type="customize" onClick={this.logOut}>Log out</button>);
 
     if (!customize) {
       customizeButton = <button type="customize" onClick={this.CustomizeOn}>Customize</button>;
@@ -131,9 +142,11 @@ export default class Profile extends Component {
         <div style={mystyle}>
           <title>Profile</title>
           <h2>Profile</h2>
+          <h2>Profile - Hello {this.props.username}</h2>
           {customizeButton}
           {colorPicker}
           {fontPicker}
+          {logOut}
           <div style={fontChoice}>
             {/* {allTextPosts} */}
           </div>

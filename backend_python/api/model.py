@@ -8,8 +8,11 @@ Created on Sun May  9 14:25:29 2021
 import sqlalchemy as db
 from sqlalchemy import create_engine, MetaData, Table, Column, Integer, Boolean, String, ForeignKey, Time
 from sqlalchemy.sql import select, update
+from sqlalchemy.orm import sessionmaker
 
 engine = create_engine('postgresql://postgres:1234@localhost/postgres') #local host address (//USERNAME:PASSWORD@HOSTNAME/DATABASENAME)
+Session = sessionmaker(bind=engine)
+session = Session()
 meta = MetaData()
 
 accounts = Table(

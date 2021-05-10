@@ -230,8 +230,10 @@ class SocialNet(Resource):
             
             # Store the ret_msg in the database as someone the user follows
          
-        if request_type == "logout":
+        if request_type == "logOut":
             update_login_status('LoginStatus', True, False)
+            print("logged out")
+            message = "logged out"
 
         # if ret_msg:
         #     message = "Your message: {}".format(ret_msg)

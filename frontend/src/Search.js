@@ -38,10 +38,10 @@ export default class Search extends Component {
   }
 
   follow(user) {
-    //console.log("User: ", user.key);
+    console.log("User: ", user.key);
     axios.post("http://localhost:5000/flask/hello", {type: "follow", message: user.key})
       .then(response => {
-        console.log("Backend: now following - ", response.data.message);
+        console.log("Search - Backend: now following - ", response.data.message);
       })
   }
 
@@ -49,14 +49,13 @@ export default class Search extends Component {
     // event.preventDefault();
     // let users = [];
     //let usersWithKey;
-    let none = "none";
     axios.post("http://localhost:5000/flask/hello", {type: "getUsers"})
       .then(response => {
         console.log("Backend: users - ", response.data.message);
         const users = response.data.users;
         const usersWithKey = users.map(this.setKeys);
         this.setState({data: usersWithKey});
-        console.log("Backend: users - ", users);
+        console.log("Search - Backend: users - ", users);
       })
     // const usersWithKey = users.map(this.setKeys);
     // console.log("Key: ", usersWithKey);

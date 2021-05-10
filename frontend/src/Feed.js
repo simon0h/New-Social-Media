@@ -17,20 +17,20 @@ export default class Feed extends Component {
 
   componentDidMount = () => {
     //e.preventDefault();
-    let none = "none";
     if (this.props.username === undefined) {
-      console.log("undefined")
+      console.log("Feed - undefined username");
     }
     else { 
+      console.log("Feed - username - ", this.props.username);
       axios.post("http://localhost:5000/flask/hello", {type: "getFollowingTextPosts", message: this.props.username})
         .then(response => {
           this.setState({textPosts: response.data.arr})
-          console.log("Backend: following text posts - ", this.state.textPosts);
+          console.log("Feed - Backend: following text posts - ", this.state.textPosts);
         })
       axios.post("http://localhost:5000/flask/hello", {type: "getFollowingImagePosts", message: this.props.username})
         .then(response => {
           this.setState({imgPosts: response.data.arr})
-          console.log("Backend: following image posts - ", this.state.imgPosts);
+          console.log("Feed - Backend: following image posts - ", this.state.imgPosts);
         })
     }
   }
@@ -46,7 +46,7 @@ export default class Feed extends Component {
     for (let i = 0; i < this.fileArray.length; i++) {
       axios.post("http://localhost:5000/flask/hello", {type: "newImages", message: this.fileArray[i]})
         .then(response => {
-          console.log("Backend: new image post - ", response.data.message);
+          console.log("Feed - Backend: new image post - ", response.data.message);
       })
     }
     this.setState({file: this.fileArray});
@@ -78,7 +78,7 @@ export default class Feed extends Component {
     axios.post("http://localhost:5000/flask/hello", {type: "newTextPost", message: this.state.textPost})
       .then(response => {
         this.setState({posts: response.data.arr})
-        console.log("Backend: new text post - ", response.data.arr);
+        console.log("Feed - Backend: new text post - ", response.data.arr);
     })
   }
 
@@ -88,8 +88,10 @@ export default class Feed extends Component {
     let postButton;
     let postImageButton;
     let postTextButton;
-    let allTextPosts;
-    console.log(textPosts);
+    let allTextPosts = (
+      <div>
+      {textPosts.map(p => <div className="posts" key={p}>{p}</div>)}
+      </div>);
 
     if (!post) {
       postButton = <button type="post" onClick={this.PostOn}>Post</button>;
@@ -126,10 +128,6 @@ export default class Feed extends Component {
         </form>
       )
     }
-    allTextPosts = (
-      <div>
-      {textPosts.map(p => <div className="posts" key={p}>{p}</div>)}
-      </div>);
 
     return (
       <React.Fragment>

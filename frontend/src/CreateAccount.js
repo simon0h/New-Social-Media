@@ -17,20 +17,33 @@ export default function CreateAccount({setToken}) {
   let takenUsername;
   let passwordsDoNotMatch;
   let submitAgain;
+  let _isMounted = false;
 
-  const handleSubmit = e => {
+  const componentDidMount = () => {
+    console.log("componentDidMount");
+    _isMounted = true;
+  }
+
+  const componentWillUnmount = () => {
+    _isMounted = false;
+  }
+
+
+  const handleSubmit = async e => {
     e.preventDefault();
+    let isMounted = true;
     var m = username.indexOf(".");
-    let username;
     let payload = "";
+    let u = false;
+    let p = false;
     if (m === -1) {
       setValidUsername(true);
       axios.post("http://localhost:5000/flask/hello", {type: "checkUniqueUsername", message: username})
         .then(response => {
-          console.log("Backend: username is ", response.data.message);
+          console.log("CreateAccount - Backend: username is ", response.data.message);
           if (response.data.message === "unique") {
             setUniqueUsername(true);
-            username = response.data.message;
+            u = true;
           }
           setSubmit(true);
         })
@@ -41,20 +54,22 @@ export default function CreateAccount({setToken}) {
       payload = password + "." + confirmPassword;
       axios.post("http://localhost:5000/flask/hello", {type: "checkValidPassword", message: payload})
         .then(response => {
-          console.log("Backend: passwords ", response.data.message);
+          console.log("CreateAccount - Backend: passwords ", response.data.message);
           if (response.data.message === "match") {
             setPasswordsMatch(true);
+            console.log("CreateAccount - Backend: passwordsMatch first - ", passwordsMatch);
+            p = true;
           }
           setSubmit(true);
         }
       )
     }
-    // console.log(uniqueUsername);
-    // console.log(passwordsMatch);
-    if (uniqueUsername && passwordsMatch) {
+    console.log("CreateAccount - Backend: uniqueUsername - ", uniqueUsername);
+    console.log("CreateAccount - Backend: passwordsMatch - ", passwordsMatch);
+    if (p && u) {
       axios.post("http://localhost:5000/flask/hello", {type: "newAccountCreated", message: payload})
         .then(response => {
-          console.log("Backend: ", response.data.message);
+          console.log("CreateAccount - Backend: if match ", response.data.message);
         }
       )}
       setToken(username, true);

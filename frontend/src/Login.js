@@ -25,7 +25,7 @@ export default function Login({setToken}) {
 
     axios.post("http://localhost:5000/flask/hello", {type: "checkLogin", message: payload})
       .then(response => {
-        console.log("Backend: ", response.data.message);
+        console.log("Login - Backend: ", response.data.message);
         if (response.data.message === "ValidCombo") {
           setLoggedIn(true);
           setToken(username, true);
