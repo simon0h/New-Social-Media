@@ -190,18 +190,41 @@ class SocialNet(Resource):
             message = "new account created"
         
         if request_type == "getFollowingTextPosts":
-            if (ret_msg is not None):
-                result = search_username('Feed', ret_msg[0]) #ret_msg is the followed user
-                posts = [r.Text[0] for r in result] # Check with the backend for all text posts
+            lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
+            post = []
+            for koi in lst.following.split():
+                result = search_username('Feed', koi) #ret_msg is the followed user
+                posts = [r.Text for r in result] # Check with the backend for all text posts
+                post += posts
+            return post
+            
         if request_type == "getFollowingImagePosts":
-            if (ret_msg is not None):
-                result = search_username('Feed', ret_msg[0]) #ret_msg is the followed user
-                posts = [r.Text[0] for r in result] # Check with the backend for all text posts
+            lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
+            post = []
+            for koi in lst.following.split('\t'):
+                result = search_username('Feed', koi) #ret_msg is the followed user
+                posts = [r.Images for r in result] # Check with the backend for all text posts
+                post += posts
+            return post 
 
         if request_type == "getMyTextPosts":
             current_user_name = return_current_user('LoginStatus')
             result = search_username('Feed', current_user_name) #ret_msg is my username
             posts = [r.Text[0] for r in result] 
+            
+        if request_type == "getMyImagePosts":
+            current_user_name = return_current_user('LoginStatus')
+            result = search_username('Feed', current_user_name) #ret_msg is my username
+            posts = [r.Images[0] for r in result] 
+            
+        if request_type == "newImagePost":
+            # print(ret_msg)
+            # posts.append(ret_msg[2])
+            
+            Foo = meta.tables['Feed']
+            ins = Foo.insert({'Username':current_user_name, 'Image':ret_msg[0]})
+            conn.execute(ins)
+            message = "new image post added"
         
         if request_type == "newTextPost":
             # print(ret_msg)
@@ -225,9 +248,13 @@ class SocialNet(Resource):
         if request_type == "follow":
             # send to databse code
             #ret_msg[0] is the username, ret_msg[2] is the one the user follows
-            current_user_name = return_current_user('LoginStatus')
-            updt1 = update_user_name('Profile', current_user_name, ret_msg[0])
-            updt2 = update_user_name('Accounts', current_user_name, ret_msg[0])
+            lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
+            if (!lst_following):
+                updt1 = update_entry('Profile', current_user_name, 'Followed', ret_msg[0])
+                updt2 = update_entry('Accounts', current_user_name, 'Followed', ret_msg[0])
+            else:
+                updt1 = update_entry('Profile', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
+                updt2 = update_entry('Accounts', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
             message = ret_msg[0]
             
             # Store the ret_msg in the database as someone the user follows
