@@ -36,6 +36,7 @@ export default class App extends PureComponent {
 
   logout = () => {
     this.setState({loggedIn: false});
+    this.forceUpdate();
   }
 
   setToken = (currUsername, status) => {
@@ -43,6 +44,39 @@ export default class App extends PureComponent {
   }
 
   render() {
+    console.log("LOGIN STATUS =====", this.state.loggedIn);
+    if (this.state.loggedIn) {
+      return (
+        <React.Fragment>
+          {/* <Feed username={this.state.username} /> */}
+          {/* <Search username={this.state.username} /> */}
+          {/* <Profile username={this.state.username} /> */}
+          <body>
+            <title>Home</title>
+            <header className="newSocialMedia">New Social Media</header>
+            <p className="navigation">
+              <li><a href="/feed">Feed</a></li>
+              <li><a href="/search">Search</a></li>
+              <li><a href="/profile">Profile</a></li>
+            </p>
+            <BrowserRouter>
+              <Switch>
+                <Route path="/Feed">
+                  <Feed username={this.state.username} />
+                </Route>
+                <Route path="/Search">
+                  <Search username={this.state.username} />
+                </Route>
+                <Route path="/Profile">
+                  <Profile username={this.state.username} loggedIn={this.state.loggedIn} logout={this.logout} />
+                </Route>
+              </Switch>
+            </BrowserRouter>
+          </body>
+        </React.Fragment>
+      );
+    }
+
     if (!this.state.goToLogin && !this.state.goToCreateAccount && !this.state.loggedIn) {
       // Show login button and create account button
       return (
@@ -72,36 +106,6 @@ export default class App extends PureComponent {
         //console.log(4);
         return <Login setToken={this.setToken} />
       }
-    }   
-
-    return (
-      <React.Fragment>
-        {/* <Feed username={this.state.username} /> */}
-        {/* <Search username={this.state.username} /> */}
-        {/* <Profile username={this.state.username} /> */}
-        <body>
-          <title>Home</title>
-          <header className="newSocialMedia">New Social Media</header>
-          <p className="navigation">
-            <li><a href="/feed">Feed</a></li>
-            <li><a href="/search">Search</a></li>
-            <li><a href="/profile">Profile</a></li>
-          </p>
-          <BrowserRouter>
-            <Switch>
-              <Route path="/Feed">
-                <Feed username={this.state.username} />
-              </Route>
-              <Route path="/Search">
-                <Search username={this.state.username} />
-              </Route>
-              <Route path="/Profile">
-                <Profile username={this.state.username} logout={this.logout} />
-              </Route>
-            </Switch>
-          </BrowserRouter>
-        </body>
-      </React.Fragment>
-    );
+    }
   }
 }

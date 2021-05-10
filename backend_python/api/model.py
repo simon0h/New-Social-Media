@@ -21,7 +21,7 @@ accounts = Table(
     Column('Images', String),
     Column('Followed', String),
     Column('Font', String),
-    Column('Color', Integer)
+    Column('Color', String)
 )
 
 feed = Table(
@@ -40,7 +40,7 @@ profile = Table(
     Column('First', String),
     Column('Last', String),
     Column('Font', String),
-    Column('Color', Integer),
+    Column('Color', String),
     Column('Followed', String),
     Column('Images', String)
 )
@@ -108,6 +108,12 @@ def update_login_status(tableName, Status, updateValue):
     )
     conn.execute(stmt)
 
+# def return_color(tableName, color):
+#     table = meta.tables[tableName]
+#     st = select(table)
+#     result = [r for r in conn.execute(st)]
+#     return result[0][0]
+
 def return_login_status(tableName):
     table = meta.tables[tableName]
     st = select(table)
@@ -125,7 +131,7 @@ def return_current_user(tableName):
 # return_login_status('LoginStatus')
 
 # Foo = meta.tables['Accounts']
-# ins = Foo.insert({'Username':'rr', 'Password':'rr', 'Followed':'e'})
+# ins = Foo.insert({'Username':'rr', 'Password':'rr', 'Followed':'e', 'Color': '#5d2424'})
 # conn.execute(ins)
 
 # Foo2 = meta.tables['Accounts']

@@ -7,7 +7,7 @@ export default class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {backgroundColor: "white", customize: false, font: "Poppins", posts: []};
-    this.handleChange = this.handleChange.bind(this);
+    this.handleFontChange = this.handleFontChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.allImgPosts = this.allImgPosts.bind(this);
   }
@@ -16,7 +16,17 @@ export default class Profile extends Component {
     axios.post("http://localhost:5000/flask/hello", {type: "getMyTextPosts"})
       .then(response => {
         this.setState({posts: response.data.arr})
-        console.log("Profile - Backend: my text posts - ", this.state.arr);
+        console.log("Profile - Backend: my text posts - ", this.state.posts);
+      })
+    axios.post("http://localhost:5000/flask/hello", {type: "getMyColor"})
+      .then(response => {
+        this.setState({backgroundColor: response.data.message})
+        console.log("Profile - Backend: my color - ", this.state.backgroundColor);
+      })
+    axios.post("http://localhost:5000/flask/hello", {type: "getMyFont"})
+      .then(response => {
+        this.setState({font: response.data.message})
+        console.log("Profile - Backend: my font - ", this.state.font);
       })
   }
 
@@ -25,18 +35,16 @@ export default class Profile extends Component {
     axios.post("http://localhost:5000/flask/hello", {type: "logOut"})
       .then(response => {
         this.props.logout();
-        console.log("Profile - Backend: logout - ", response.data.message);
+        console.log("Profile - Backend: logout - ", this.props.loggedIn);
       })
   }
 
   CustomizeOn = () => {
     this.setState({customize: true});
-    // console.log("Customize on");
   }
 
   CustomizeOff = () => {
     this.setState({customize: false});
-    // console.log("Customize off");
   }
 
   CustomizeButton(click) {
@@ -47,18 +55,27 @@ export default class Profile extends Component {
 
   handleChangeComplete = (color) => {
     this.setState({backgroundColor: color.hex});
-    // console.log(this.state.backgroundColor);
-    // this.forceUpdate();
+    axios.post("http://localhost:5000/flask/hello", {type: "setMyColor", message: this.state.backgroundColor})
+      .then(response => {
+        this.setState({font: response.data.message})
+        console.log("Profile - Backend: my font - ", this.state.font);
+      })
   };
 
-  handleChange(event) {
+  handleFontChange(event) {
     // console.log(event.target.font)
     this.setState({font: event.target.value});
+    axios.post("http://localhost:5000/flask/hello", {type: "setMyFont", message: this.state.font})
+      .then(response => {
+        this.setState({font: response.data.message})
+        console.log("Profile - Backend: my font - ", this.state.font);
+      })
   }
 
   handleSubmit(event) {
     event.preventDefault();
   }
+
   allImgPosts() {
     let imgObj = [];
     imgObj.push(this.state.imgPosts);
@@ -96,11 +113,11 @@ export default class Profile extends Component {
       fontSize: "25px"
     };
 
-    // allTextPosts = (
-    //   <script>
-    //     {allPosts.map(p => <div className="posts" key={p}>{p}</div>)}
-    //   </script>
-    // );
+    allTextPosts = (
+      <script>
+        {allPosts.map(p => <div className="posts" key={p}>{p}</div>)}
+      </script>
+    );
 
     logOut = (
       <button type="customize" onClick={this.logOut}>Log out</button>);
@@ -125,7 +142,7 @@ export default class Profile extends Component {
           <form onSubmit={this.handleSubmit}>
             <label>
               Pick a font:
-              <select value={this.state.font} onChange={this.handleChange} style={{marginLeft: "20px", fontSize: "18px"}}>
+              <select value={this.state.font} onChange={this.handleFontChange} style={{marginLeft: "20px", fontSize: "18px"}}>
                 <option value="Arial" style={{fontFamily: "Arial"}}>Arial</option>
                 <option value="Brush Script MT" style={{fontFamily: "Brush Script MT"}}>Brush Script MT</option>
                 <option value="Courier New" style={{fontFamily: "Courier New"}}>Courier New</option>
@@ -149,7 +166,7 @@ export default class Profile extends Component {
           {fontPicker}
           {logOut}
           <div style={fontChoice}>
-            {/* {allTextPosts} */}
+            {allTextPosts}
           </div>
           {this.allImgPosts()}
         </div>

@@ -111,13 +111,14 @@ class SocialNet(Resource):
         # 'resultStatus': 'SUCCESS',
         # 'message': "In Python"
         # }
-        if (self.loggedIn):# Check with the database to see if the user is logged in
+        getLogin = return_login_status('LoginStatus')
+        if (getLogin):# Check with the database to see if the user is logged in
             return {'loginStatus': True}
         else:
             return {'loginStatus': False} 
 
     def post(self):
-        print("Logged in: ", self.loggedIn)
+        #print("Logged in: ", self.loggedIn)
         parser = reqparse.RequestParser()
         parser.add_argument('type', type=str)
         parser.add_argument('message', type=str)
@@ -194,26 +195,26 @@ class SocialNet(Resource):
             current_user_name = return_current_user('LoginStatus')
             lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
             post = []
-            for koi in lst.following.split():
+            for koi in lst_following.split():
                 result = search_username('Feed', koi) #ret_msg is the followed user
                 posts = [r.Text for r in result] # Check with the backend for all text posts
                 post += posts
-            return post
+            #return post
             
         if request_type == "getFollowingImagePosts":
             current_user_name = return_current_user('LoginStatus')
             lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
             post = []
-            for koi in lst.following.split('\t'):
+            for koi in lst_following.split('\t'):
                 result = search_username('Feed', koi) #ret_msg is the followed user
                 posts = [r.Images for r in result] # Check with the backend for all text posts
                 post += posts
-            return post 
+            #return post 
 
         if request_type == "getMyTextPosts":
             current_user_name = return_current_user('LoginStatus')
             result = search_username('Feed', current_user_name) #ret_msg is my username
-            posts = [r.Text[0] for r in result] 
+            posts = [r.Text[0] for r in result]
             
         if request_type == "getMyImagePosts":
             current_user_name = return_current_user('LoginStatus')
@@ -248,23 +249,22 @@ class SocialNet(Resource):
             message = "get user list"
             # Get an array of all users from the database
         
-        if request_type == "follow":
-            # send to databse code
-            #ret_msg[0] is the username, ret_msg[2] is the one the user follows
-            lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
-            if (!lst_following):
-                updt1 = update_entry('Profile', current_user_name, 'Followed', ret_msg[0])
-                updt2 = update_entry('Accounts', current_user_name, 'Followed', ret_msg[0])
-            else:
-                updt1 = update_entry('Profile', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
-                updt2 = update_entry('Accounts', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
-            message = ret_msg[0]
+        # if request_type == "follow":
+        #     # send to databse code
+        #     #ret_msg[0] is the username, ret_msg[2] is the one the user follows
+        #     lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
+        #     if (!lst_following):
+        #         updt1 = update_entry('Profile', current_user_name, 'Followed', ret_msg[0])
+        #         updt2 = update_entry('Accounts', current_user_name, 'Followed', ret_msg[0])
+        #     else:
+        #         updt1 = update_entry('Profile', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
+        #         updt2 = update_entry('Accounts', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
+        #     message = ret_msg[0]
             
             # Store the ret_msg in the database as someone the user follows
          
         if request_type == "logOut":
             update_login_status('LoginStatus', True, False)
-            print("logged out")
             message = "logged out"
 
         # if ret_msg:

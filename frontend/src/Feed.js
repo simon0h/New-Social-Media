@@ -8,7 +8,7 @@ export default class Feed extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {file: [null], post: false, textPosts: [null], imgPosts: [null]};
+    this.state = {file: [null], post: false, textPosts: [], imgPosts: []};
     this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
     this.allImgPosts = this.allImgPosts.bind(this);
     this.uploadFiles = this.uploadFiles.bind(this);
@@ -88,11 +88,7 @@ export default class Feed extends Component {
     let postButton;
     let postImageButton;
     let postTextButton;
-    let allTextPosts = (
-      <div>
-      {textPosts.map(p => <div className="posts" key={p}>{p}</div>)}
-      </div>);
-
+    let allTextPosts = textPosts.map((p) => <div className="posts">{p}</div>);
     if (!post) {
       postButton = <button type="post" onClick={this.PostOn}>Post</button>;
       postImageButton = <div></div>;
