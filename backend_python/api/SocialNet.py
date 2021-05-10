@@ -182,6 +182,7 @@ class SocialNet(Resource):
             Foo1 = meta.tables['Accounts'] #add accounts row
             ins1 = Foo1.insert({'Username':ret_msg[0], 'Password':ret_msg[1]})
             conn.execute(ins1)
+            print("SETTING NEW USER")
             
             Foo2 = meta.tables['Profile'] #add profile row
             ins2 = Foo2.insert({'Username':ret_msg[0]})
@@ -191,25 +192,29 @@ class SocialNet(Resource):
             update_user_name('LoginStatus', True, ret_msg[0])
             message = "new account created"
             
-                if request_type == "getMyColor":
+        if request_type == "getMyColor":
             current_user_name = return_current_user('LoginStatus')
-            color = return_entry('Accounts', current_user_name, 'Color')[0]
-            return color
+            if len(return_entry('Accounts', current_user_name, 'Color')) > 0:
+                color = return_entry('Accounts', current_user_name, 'Color')[0]
+                message = color
         
         if request_type == "getMyFont":
             current_user_name = return_current_user('LoginStatus')
-            color = return_entry('Accounts', current_user_name, 'Font')[0]
-            return color
+            if len(return_entry('Accounts', current_user_name, 'Color')) > 0:
+                font = return_entry('Accounts', current_user_name, 'Font')[0]
+                message = font
         
         if request_type == "setMyColor":
+            print(type(ret_msg[0]))
             current_user_name = return_current_user('LoginStatus')
-            update_entry('Accounts', current_user_name, 'Color', rst_msg[0])
-            update_entry('Profile', current_user_name, 'Color', rst_msg[0])
+            update_entry('Accounts', current_user_name, 'Color', ret_msg[0])
+            update_entry('Profile', current_user_name, 'Color', ret_msg[0])
             
         if request_type == "setMyFont":
             current_user_name = return_current_user('LoginStatus')
-            update_entry('Accounts', current_user_name, 'Font', rst_msg[0])
-            update_entry('Profile', current_user_name, 'Font', rst_msg[0])
+            update_entry('Accounts', current_user_name, 'Font', ret_msg[0])
+            update_entry('Profile', current_user_name, 'Font', ret_msg[0])
+            message = ret_msg[0]
         
         if request_type == "getFollowingTextPosts":
             current_user_name = return_current_user('LoginStatus')
@@ -246,6 +251,7 @@ class SocialNet(Resource):
         if request_type == "newImagePost":
             # print(ret_msg)
             # posts.append(ret_msg[2])
+            current_user_name = return_current_user('LoginStatus')
             
             Foo = meta.tables['Feed']
             ins = Foo.insert({'Username':current_user_name, 'Image':ret_msg[0]})
@@ -272,13 +278,14 @@ class SocialNet(Resource):
             # Get an array of all users from the database
         
         if request_type == "follow":
+            current_user_name = return_current_user('LoginStatus')
             # send to databse code
             #ret_msg[0] is the username, ret_msg[2] is the one the user follows
             lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
-            if (lst_following && (ret_msg[0] not in lst_following.split('\t'))):
+            if (lst_following and (ret_msg[0] not in lst_following.split('\t'))):
                 updt1 = update_entry('Profile', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
                 updt2 = update_entry('Accounts', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
-            else if (lst_following && (ret_msg[0] in lst_following.split('\t'))):
+            elif (lst_following and (ret_msg[0] in lst_following.split('\t'))):
                 1
             else: 
                 updt1 = update_entry('Profile', current_user_name, 'Followed', ret_msg[0])

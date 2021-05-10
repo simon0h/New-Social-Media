@@ -20,13 +20,17 @@ export default class Profile extends Component {
       })
     axios.post("http://localhost:5000/flask/hello", {type: "getMyColor"})
       .then(response => {
-        this.setState({backgroundColor: response.data.message})
-        console.log("Profile - Backend: my color - ", this.state.backgroundColor);
+        if (response.data.message !== null) {
+          this.setState({backgroundColor: response.data.message})
+          console.log("Profile - Backend: my color - ", this.state.backgroundColor);
+        }
       })
     axios.post("http://localhost:5000/flask/hello", {type: "getMyFont"})
       .then(response => {
-        this.setState({font: response.data.message})
-        console.log("Profile - Backend: my font - ", this.state.font);
+        if (response.data.message !== "No message") {
+          this.setState({font: response.data.message})
+          console.log("Profile - Backend: my font - ", this.state.font);
+        }
       })
   }
 
@@ -57,18 +61,18 @@ export default class Profile extends Component {
     this.setState({backgroundColor: color.hex});
     axios.post("http://localhost:5000/flask/hello", {type: "setMyColor", message: this.state.backgroundColor})
       .then(response => {
-        this.setState({font: response.data.message})
-        console.log("Profile - Backend: my font - ", this.state.font);
+        this.setState({color: response.data.message})
+        console.log("Profile - Backend: my font color to - ", this.state.color);
       })
   };
 
   handleFontChange(event) {
     // console.log(event.target.font)
     this.setState({font: event.target.value});
-    axios.post("http://localhost:5000/flask/hello", {type: "setMyFont", message: this.state.font})
+    axios.post("http://localhost:5000/flask/hello", {type: "setMyFont", message: event.target.value})
       .then(response => {
         this.setState({font: response.data.message})
-        console.log("Profile - Backend: my font - ", this.state.font);
+        console.log("Profile - Backend: my font set to - ", this.state.font);
       })
   }
 
