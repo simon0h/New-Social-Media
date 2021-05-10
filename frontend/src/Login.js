@@ -28,15 +28,15 @@ export default function Login({setToken}) {
         console.log("Backend: ", response.data.message);
         if (response.data.message === "ValidCombo") {
           setLoggedIn(true);
-          setToken(true);
+          setToken(username, true);
         }
     }).catch(error => {
       console.log(error.response)
     })
-    if (loggedIn) {
-      console.log("in if");
-      setToken(true);
-    }
+    // if (loggedIn) {
+    //   console.log("in if");
+    //   setToken(true);
+    // }
   }
 
   return (

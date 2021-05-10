@@ -11,7 +11,7 @@ import axios from "axios";
 export default class App extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {goToLogin: false, goToCreateAccount: false, loggedIn: false, message: ""};
+    this.state = {goToLogin: false, goToCreateAccount: false, loggedIn: false, username: "", message: ""};
   }
 
   handleLoginClick = () => {
@@ -34,8 +34,8 @@ export default class App extends PureComponent {
     })
   }
 
-  setToken = (status) => {
-    this.setState({loggedIn: status});
+  setToken = (currUsername, status) => {
+    this.setState({username: currUsername, loggedIn: status});
   }
 
   render() {
@@ -59,7 +59,7 @@ export default class App extends PureComponent {
 
     if (this.state.goToCreateAccount && !this.state.loggedIn) {
       // Show create account
-      return <CreateAccount/>;
+      return <CreateAccount setToken={this.setToken} />
     }
 
     if (this.state.goToLogin && !this.state.loggedIn) {
@@ -72,6 +72,9 @@ export default class App extends PureComponent {
 
     return (
       <React.Fragment>
+        {/* <Feed username={this.state.username} /> */}
+        {/* <Search username={this.state.username} /> */}
+        {/* <Profile username={this.state.username} /> */}
         <body>
           <title>Home</title>
           <header className="newSocialMedia">New Social Media</header>
@@ -83,13 +86,13 @@ export default class App extends PureComponent {
           <BrowserRouter>
             <Switch>
               <Route path="/Feed">
-                <Feed />
+                <Feed username={this.state.username} />
               </Route>
               <Route path="/Search">
-                <Search />
+                <Search username={this.state.username} />
               </Route>
               <Route path="/Profile">
-                <Profile />
+                <Profile username={this.state.username} />
               </Route>
             </Switch>
           </BrowserRouter>

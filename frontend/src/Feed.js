@@ -17,16 +17,22 @@ export default class Feed extends Component {
 
   componentDidMount = () => {
     //e.preventDefault();
-    axios.post("http://localhost:5000/flask/hello", {type: "getFollowingTextPosts"})
-      .then(response => {
-        this.setState({textPosts: response.data.arr})
-        console.log("Backend: following text posts - ", this.state.textPosts);
-      })
-    axios.post("http://localhost:5000/flask/hello", {type: "getFollowingImagePosts"})
-      .then(response => {
-        this.setState({imgPosts: response.data.arr})
-        console.log("Backend: following image posts - ", this.state.imgPosts);
-      })
+    let none = "none";
+    if (this.props.username === undefined) {
+      console.log("undefined")
+    }
+    else { 
+      axios.post("http://localhost:5000/flask/hello", {type: "getFollowingTextPosts", message: this.props.username})
+        .then(response => {
+          this.setState({textPosts: response.data.arr})
+          console.log("Backend: following text posts - ", this.state.textPosts);
+        })
+      axios.post("http://localhost:5000/flask/hello", {type: "getFollowingImagePosts", message: this.props.username})
+        .then(response => {
+          this.setState({imgPosts: response.data.arr})
+          console.log("Backend: following image posts - ", this.state.imgPosts);
+        })
+    }
   }
 
   uploadMultipleFiles(e) {
@@ -83,6 +89,7 @@ export default class Feed extends Component {
     let postImageButton;
     let postTextButton;
     let allTextPosts;
+    console.log(textPosts);
 
     if (!post) {
       postButton = <button type="post" onClick={this.PostOn}>Post</button>;

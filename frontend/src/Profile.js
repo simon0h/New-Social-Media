@@ -13,6 +13,7 @@ export default class Profile extends Component {
   }
 
   componentDidMount = () => {
+    let none = "none";
     axios.post("http://localhost:5000/flask/hello", {type: "getMyTextPosts"})
       .then(response => {
         this.setState({posts: response.data.arr})
@@ -70,7 +71,7 @@ export default class Profile extends Component {
 
   render () {
     var customize = this.state.customize;
-    var posts = this.state.posts;
+    let allPosts = this.state.posts;
     let customizeButton;
     let colorPicker;
     let fontPicker;
@@ -86,10 +87,11 @@ export default class Profile extends Component {
       fontSize: "25px"
     };
 
-    allTextPosts = (
-      <div>
-      {posts.map(p => <div className="posts" key={p}>{p}</div>)}
-      </div>);
+    // allTextPosts = (
+    //   <script>
+    //     {allPosts.map(p => <div className="posts" key={p}>{p}</div>)}
+    //   </script>
+    // );
 
     if (!customize) {
       customizeButton = <button type="customize" onClick={this.CustomizeOn}>Customize</button>;
@@ -133,7 +135,7 @@ export default class Profile extends Component {
           {colorPicker}
           {fontPicker}
           <div style={fontChoice}>
-            {allTextPosts}
+            {/* {allTextPosts} */}
           </div>
           {this.allImgPosts()}
         </div>

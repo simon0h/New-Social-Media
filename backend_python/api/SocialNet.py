@@ -101,14 +101,18 @@ class Database(Resource):
         self.data[post.user].add_post(post)
 
 class SocialNet(Resource):
+    # def __init__(self):
     loggedIn = False # Get this value from the databse
+
+    # def getLogin(self):
+    #     #get from database the login status
 
     def get(self):
         # return {
         # 'resultStatus': 'SUCCESS',
         # 'message': "In Python"
         # }
-        if (loggedIn):# Check with the database to see if the user is logged in
+        if (self.loggedIn):# Check with the database to see if the user is logged in
             return {'loginStatus': True}
         else:
             return {'loginStatus': False} 
@@ -129,7 +133,10 @@ class SocialNet(Resource):
         # ret_status, ret_msg = ReturnData(request_type, request_json)
         # currently just returning the req straight
         ret_status = request_type
-        ret_msg = request_json.split('.') #split string by period
+        if (request_json is None):
+            ret_msg = ""
+        else:
+            ret_msg = request_json.split('.') #split string by period
         message = "No message"
         current_user_name = ''
         posts = []
@@ -151,7 +158,7 @@ class SocialNet(Resource):
                 # if the databse says that they are a valid combination
                     current_user_name = result[0].Username
                     # updt = update_login_status('Accounts', current_user_name, True) #update login status to true
-                    loggedIn = True
+                    self.loggedIn = True
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
@@ -179,12 +186,19 @@ class SocialNet(Resource):
             Foo2 = meta.tables['Profile'] #add profile row
             ins2 = Foo2.insert({'Username':ret_msg[0]})
             conn.execute(ins2)
+            self.loggedIn = True
             message = "new account created"
         
         if request_type == "getFollowingTextPosts":
-            result = search_username('Feed', ret_msg[0]) #ret_msg is the followed user
-            posts = [r.Text[0] for r in result] # Check with the backend for all text posts
+            if (ret_msg is not None):
+                result = search_username('Feed', ret_msg[0]) #ret_msg is the followed user
+                posts = [r.Text[0] for r in result] # Check with the backend for all text posts
+        if request_type == "getFollowingImagePosts":
+            if (ret_msg is not None):
+                result = search_username('Feed', ret_msg[0]) #ret_msg is the followed user
+                posts = [r.Text[0] for r in result] # Check with the backend for all text posts
         
+
         if request_type == "getMyTextPosts":
             result = search_username('Feed', current_user_name) #ret_msg is my username
             posts = [r.Text[0] for r in result] 
@@ -218,7 +232,7 @@ class SocialNet(Resource):
         # if ret_msg:
         #     message = "Your message: {}".format(ret_msg)
 
-        final_ret = {"status": "Success", "message": message, "posts": posts, "users": users}
+        final_ret = {"status": "Success", "message": message, "arr": posts, "users": users}
 
         return final_ret
         

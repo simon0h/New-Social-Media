@@ -49,6 +49,7 @@ export default class Search extends Component {
     // event.preventDefault();
     // let users = [];
     //let usersWithKey;
+    let none = "none";
     axios.post("http://localhost:5000/flask/hello", {type: "getUsers"})
       .then(response => {
         console.log("Backend: users - ", response.data.message);

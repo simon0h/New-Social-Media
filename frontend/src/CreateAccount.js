@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import "./AccountManagement.css";
 import axios from "axios";
 
-export default function CreateAccount() {
+export default function CreateAccount({setToken}) {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
   const [uniqueUsername, setUniqueUsername] = useState(false);
@@ -21,6 +21,7 @@ export default function CreateAccount() {
   const handleSubmit = e => {
     e.preventDefault();
     var m = username.indexOf(".");
+    let username;
     let payload = "";
     if (m === -1) {
       setValidUsername(true);
@@ -29,6 +30,7 @@ export default function CreateAccount() {
           console.log("Backend: username is ", response.data.message);
           if (response.data.message === "unique") {
             setUniqueUsername(true);
+            username = response.data.message;
           }
           setSubmit(true);
         })
@@ -50,11 +52,12 @@ export default function CreateAccount() {
     // console.log(uniqueUsername);
     // console.log(passwordsMatch);
     if (uniqueUsername && passwordsMatch) {
-      axios.post("http://localhost:5000/flask/hello", {type: "newAccountCreated", message: payload}) // add payload
+      axios.post("http://localhost:5000/flask/hello", {type: "newAccountCreated", message: payload})
         .then(response => {
           console.log("Backend: ", response.data.message);
         }
       )}
+      setToken(username, true);
   }
 
   if (submitted) {
@@ -119,4 +122,8 @@ export default function CreateAccount() {
       </div>
     </React.Fragment>
   );
+}
+
+CreateAccount.propTypes = {
+  setToken: PropTypes.func.isRequired
 }
