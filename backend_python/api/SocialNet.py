@@ -271,17 +271,19 @@ class SocialNet(Resource):
             message = "get user list"
             # Get an array of all users from the database
         
-        # if request_type == "follow":
-        #     # send to databse code
-        #     #ret_msg[0] is the username, ret_msg[2] is the one the user follows
-        #     lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
-        #     if (!lst_following):
-        #         updt1 = update_entry('Profile', current_user_name, 'Followed', ret_msg[0])
-        #         updt2 = update_entry('Accounts', current_user_name, 'Followed', ret_msg[0])
-        #     else:
-        #         updt1 = update_entry('Profile', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
-        #         updt2 = update_entry('Accounts', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
-        #     message = ret_msg[0]
+        if request_type == "follow":
+            # send to databse code
+            #ret_msg[0] is the username, ret_msg[2] is the one the user follows
+            lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
+            if (lst_following && (ret_msg[0] not in lst_following.split('\t'))):
+                updt1 = update_entry('Profile', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
+                updt2 = update_entry('Accounts', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
+            else if (lst_following && (ret_msg[0] in lst_following.split('\t'))):
+                1
+            else: 
+                updt1 = update_entry('Profile', current_user_name, 'Followed', ret_msg[0])
+                updt2 = update_entry('Accounts', current_user_name, 'Followed', ret_msg[0])
+            message = ret_msg[0]
             
             # Store the ret_msg in the database as someone the user follows
          
