@@ -101,7 +101,7 @@ class Database(Resource):
         self.data[post.user].add_post(post)
 
 class SocialNet(Resource):
-    loggedIn = False # Get this value from the databse
+    loggedIn = return_login_status('LoginStatus') # Get this value from the databse
 
     def get(self):
         # return {
@@ -151,7 +151,8 @@ class SocialNet(Resource):
                 # if the databse says that they are a valid combination
                     current_user_name = result[0].Username
                     # updt = update_login_status('Accounts', current_user_name, True) #update login status to true
-                    loggedIn = True
+                    update_login_status('LoginStatus', False, True)
+                    # loggedIn = True
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
@@ -173,12 +174,14 @@ class SocialNet(Resource):
         
         if request_type == "newAccountCreated": #created and logged in at the same time
             Foo1 = meta.tables['Accounts'] #add accounts row
-            ins1 = Foo1.insert({'Username':ret_msg[0], 'Password':ret_msg[1], 'LoginStatus': True})
+            ins1 = Foo1.insert({'Username':ret_msg[0], 'Password':ret_msg[1]})
             conn.execute(ins1)
             
             Foo2 = meta.tables['Profile'] #add profile row
             ins2 = Foo2.insert({'Username':ret_msg[0]})
             conn.execute(ins2)
+            
+            update_login_status('LoginStatus', False, True)
             message = "new account created"
         
         if request_type == "getFollowingTextPosts":
@@ -214,6 +217,9 @@ class SocialNet(Resource):
             message = ret_msg[0]
             
             # Store the ret_msg in the database as someone the user follows
+         
+        if request_type == "logout":
+            update_login_status('LoginStatus', True, False)
 
         # if ret_msg:
         #     message = "Your message: {}".format(ret_msg)
