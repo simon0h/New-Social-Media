@@ -101,18 +101,14 @@ class Database(Resource):
         self.data[post.user].add_post(post)
 
 class SocialNet(Resource):
-    def __init__(self):
-        self.loggedIn = False # Get this value from the databse
-
-    # def getLogin(self):
-    #     #get from database the login status
+    loggedIn = False # Get this value from the databse
 
     def get(self):
         # return {
         # 'resultStatus': 'SUCCESS',
         # 'message': "In Python"
         # }
-        if (self.loggedIn):# Check with the database to see if the user is logged in
+        if (loggedIn):# Check with the database to see if the user is logged in
             return {'loginStatus': True}
         else:
             return {'loginStatus': False} 
@@ -155,7 +151,7 @@ class SocialNet(Resource):
                 # if the databse says that they are a valid combination
                     current_user_name = result[0].Username
                     # updt = update_login_status('Accounts', current_user_name, True) #update login status to true
-                    self.loggedIn = True
+                    loggedIn = True
                     message = "ValidCombo"
                 else:
                     message = "UnvalidCombo"
