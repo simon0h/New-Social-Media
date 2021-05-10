@@ -195,20 +195,22 @@ class SocialNet(Resource):
             current_user_name = return_current_user('LoginStatus')
             lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
             post = []
-            for koi in lst_following.split():
-                result = search_username('Feed', koi) #ret_msg is the followed user
-                posts = [r.Text for r in result] # Check with the backend for all text posts
-                post += posts
+            if (lst_following is not None):
+                for koi in lst_following.split():
+                    result = search_username('Feed', koi) #ret_msg is the followed user
+                    post = [r.Text for r in result] # Check with the backend for all text posts
+                    posts += post
             #return post
             
         if request_type == "getFollowingImagePosts":
             current_user_name = return_current_user('LoginStatus')
             lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
             post = []
-            for koi in lst_following.split('\t'):
-                result = search_username('Feed', koi) #ret_msg is the followed user
-                posts = [r.Images for r in result] # Check with the backend for all text posts
-                post += posts
+            if (lst_following is not None):
+                for koi in lst_following.split('\t'):
+                    result = search_username('Feed', koi) #ret_msg is the followed user
+                    post = [r.Images for r in result] # Check with the backend for all text posts
+                    posts += post
             #return post 
 
         if request_type == "getMyTextPosts":
