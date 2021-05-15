@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import "./App.css";
+import ImageUploader from "./ImageUploader";
 import axios from "axios";
 
 export default class Feed extends Component {
@@ -44,7 +45,7 @@ export default class Feed extends Component {
     }
     //console.log("3", this.fileArray);
     for (let i = 0; i < this.fileArray.length; i++) {
-      axios.post("http://localhost:5000/flask/hello", {type: "newImages", message: this.fileArray[i]})
+      axios.post("http://localhost:5000/flask/hello", {type: "newImagePost", message: this.fileArray[i]})
         .then(response => {
           console.log("Feed - Backend: new image post - ", response.data.message);
       })
@@ -131,6 +132,7 @@ export default class Feed extends Component {
         {postImageButton}
         {postTextButton}
         {allTextPosts}
+        <ImageUploader />
         <div className="multipleImages">
           {this.allImgPosts()}
         </div>

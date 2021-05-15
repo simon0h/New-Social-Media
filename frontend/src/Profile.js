@@ -18,6 +18,11 @@ export default class Profile extends Component {
         this.setState({posts: response.data.arr})
         console.log("Profile - Backend: my text posts - ", this.state.posts);
       })
+    axios.post("http://localhost:5000/flask/hello", {type: "getMyImagePosts", message: this.props.username})
+        .then(response => {
+          this.setState({imgPosts: response.data.arr})
+          console.log("Profile - Backend: my image posts - ", this.state.imgPosts);
+        })
     axios.post("http://localhost:5000/flask/hello", {type: "getMyColor"})
       .then(response => {
         if (response.data.message !== null) {
@@ -84,17 +89,7 @@ export default class Profile extends Component {
     let imgObj = [];
     imgObj.push(this.state.imgPosts);
     return (
-      <div className="multipleImages">
-        {(imgObj || []).map(url => (
-            <img src={url} alt="..." style={{
-              borderRadius:"10px",
-              height:"auto",
-              left:"30px",
-              marginTop:"20px",
-              marginRight:"20px",
-              width:"500px"}}/>
-        ))}
-      </div>
+      (imgObj|| []).map(url => <img src={url} className="multipleImages" alt="Image placeholder" key={url}/>)
     )
   }
 
@@ -166,7 +161,9 @@ export default class Profile extends Component {
           <div style={fontChoice}>
             {allTextPosts}
           </div>
-          {this.allImgPosts()}
+          <div className = "multipleImages">
+            {this.allImgPosts()}
+          </div>
         </div>
       </React.Fragment>
     )

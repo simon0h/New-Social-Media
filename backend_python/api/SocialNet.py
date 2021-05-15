@@ -2,10 +2,18 @@
 import time
 import json
 import warnings
+import os
 from api.model import *
+from werkzeug.utils import secure_filename
+from flask import Flask, flash, request, redirect, url_for, session
+from flask_cors import CORS, cross_origin
 from flask_restful import Api, Resource, reqparse
-from os import listdir
 from flask_sqlalchemy import SQLAlchemy
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
+logger = logging.getLogger('HELLO WORLD')
 
 class Post(Resource):
     def __init__(self, user="", description="", is_video=False, file=None, post_time=None, data_dict=None):
@@ -105,6 +113,32 @@ class SocialNet(Resource):
     current_user_name = return_current_user('LoginStatus') # Get current user name
     # def getLogin(self):
     #     #get from database the login status
+
+    UPLOAD_FOLDER = '/path/to/the/uploads'
+    ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
+
+    app = Flask(__name__)
+    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+    #@app.route('/upload', methods=['POST'])
+    def fileUpload():
+        target=os.path.join(UPLOAD_FOLDER,'test_docs')
+        if not os.path.isdir(target):
+            os.mkdir(target)
+        logger.info("welcome to upload`")
+        file = request.files['file'] 
+        filename = secure_filename(file.filename)
+        destination="/".join([target, filename])
+        file.save(destination)
+        session['uploadFilePath']=destination
+        response="Whatever you wish too return"
+        return response
+
+    if __name__ == "__main__":
+        app.secret_key = os.urandom(24)
+        app.run(debug=True,host="0.0.0.0",use_reloader=False)
+
+    CORS(app, expose_headers='Authorization')
 
     def get(self):
         # return {
@@ -235,7 +269,7 @@ class SocialNet(Resource):
                 for koi in lst_following.split('\t'):
                     result = search_username('Feed', koi) #ret_msg is the followed user
                     post = [r.Images for r in result] # Check with the backend for all text posts
-                    posts += post
+                    posts += str(post)
             #return post 
 
         if request_type == "getMyTextPosts":
@@ -249,26 +283,20 @@ class SocialNet(Resource):
             posts = [r.Images for r in result] 
             
         if request_type == "newImagePost":
-            # print(ret_msg)
-            # posts.append(ret_msg[2])
             current_user_name = return_current_user('LoginStatus')
-            
+            print("Image: ", ret_msg[0])
             Foo = meta.tables['Feed']
-            ins = Foo.insert({'Username':current_user_name, 'Image':ret_msg[0]})
+            ins = Foo.insert({'Username':current_user_name, 'Images':str(ret_msg[0])})
             conn.execute(ins)
             message = "new image post added"
         
         if request_type == "newTextPost":
-            # print(ret_msg)
-            # posts.append(ret_msg[2])
             current_user_name = return_current_user('LoginStatus')
             
             Foo = meta.tables['Feed']
             ins = Foo.insert({'Username':current_user_name, 'Text':ret_msg[0]})
             conn.execute(ins)
             message = "new text post added"
-            # Store the ret_msg in database
-            # Return the newTextPost
         
         if request_type == "getUsers":
             table = meta.tables['Accounts']
