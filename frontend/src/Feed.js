@@ -29,7 +29,7 @@ export default class Feed extends Component {
             console.log("Imgur album not found.");
           } 
           else {
-            var json = JSON.parse(req.responseText);    // You got your response back!
+            var json = JSON.parse(req.responseText);
             console.log("Imgur JSON - ", json);
             console.log("Imgur link - ", json.data.link);
             that.setState({link: json.data.link});
@@ -39,7 +39,7 @@ export default class Feed extends Component {
          console.log("Error with Imgur Request.");
        }
     }  
-    req.open("GET", request_url, true); // true for asynchronous     
+    req.open("GET", request_url, true);
     req.setRequestHeader("Authorization", "Client-ID " + api_key);
     req.send(null);
   }
@@ -70,7 +70,6 @@ export default class Feed extends Component {
     this.fileObj.push(e.target.files);
     for (let i = 0; i < this.fileObj[0].length; i++) {
         var url;
-        // console.log("2", this.fileObj[0][i]);
         this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]));
         const formdata = new FormData()
         formdata.append("image", this.fileObj[0][i]);
@@ -106,11 +105,6 @@ export default class Feed extends Component {
     return (
       (imgObj|| []).map(url => <img src={url} className="multipleImages" alt="" key={url}/>)
     )
-  }
-
-  uploadFiles(e) {
-    e.preventDefault();
-    //console.log(this.state.file);
   }
 
   PostOn = () => {
@@ -179,7 +173,6 @@ export default class Feed extends Component {
         {postImageButton}
         {postTextButton}
         {allTextPosts}
-        {/* <ImageUploader /> */}
         <div className="multipleImages">
           {this.allImgPosts()}
         </div>
