@@ -17,64 +17,15 @@ export default function CreateAccount({setToken}) {
   let takenUsername;
   let passwordsDoNotMatch;
   let submitAgain;
-  let _isMounted = false;
-
-  const componentDidMount = () => {
-    console.log("componentDidMount");
-    _isMounted = true;
-  }
-
-  const componentWillUnmount = () => {
-    _isMounted = false;
-  }
 
   const handleSubmit = async e => {
     e.preventDefault();
-    let isMounted = true;
     var m = username.indexOf(".");
     let payload = "";
     let secondPayload = "";
-    // if (m === -1) {
-    //   setValidUsername(true);
-    //   axios.post("http://localhost:5000/flask/hello", {type: "checkUniqueUsername", message: username})
-    //     .then(response => {
-    //       console.log("CreateAccount - Backend: username is ", response.data.message);
-    //       if (response.data.message === "unique") {
-    //         setUniqueUsername(true);
-    //         u = true;
-    //       }
-    //       setSubmit(true);
-    //     })
-    // }
-    // var n = password.indexOf(".");
-    // if (n === -1) {
-    //   setValidPassword(true);
-    //   payload = password + "." + confirmPassword;
-    //   axios.post("http://localhost:5000/flask/hello", {type: "checkValidPassword", message: payload})
-    //     .then(response => {
-    //       console.log("CreateAccount - Backend: passwords ", response.data.message);
-    //       if (response.data.message === "match") {
-    //         setPasswordsMatch(true);
-    //         console.log("CreateAccount - Backend: passwordsMatch - ", response.data.message);
-    //         p = true;
-    //       }
-    //       setSubmit(true);
-    //     }
-    //   )
-    // }
-    // console.log("CreateAccount - Backend: uniqueUsername - ", p);
-    // console.log("CreateAccount - Backend: passwordsMatch - ", u);
-    // if (p && u) {
-    //   axios.post("http://localhost:5000/flask/hello", {type: "newAccountCreated", message: payload})
-    //     .then(response => {
-    //       console.log("CreateAccount - Backend: if match ", response.data.message);
-    //     }
-    //   )}
-    //   setToken(username, true);
     var n = password.indexOf(".");
     if (m === -1 && n ===-1) {
       var u;
-      let p;
       setValidUsername(true);
       setValidPassword(true);
       axios.post("http://localhost:5000/flask/hello", {type: "checkUniqueUsername", message: username})
@@ -92,9 +43,7 @@ export default function CreateAccount({setToken}) {
                 if (response.data.message === "match" && u) {
                   setPasswordsMatch(true);
                   console.log("CreateAccount - Backend: passwordsMatch - ", response.data.message);
-                  p = true;
                   secondPayload = username + "." + confirmPassword;
-                  //console.log("PAYLOAD2")
                   axios.post("http://localhost:5000/flask/hello", {type: "newAccountCreated", message: secondPayload})
                     .then(response => {
                       console.log("CreateAccount - Backend: if match ", response.data.message);

@@ -4,16 +4,16 @@ import json
 import warnings
 import os
 from api.model import *
-from werkzeug.utils import secure_filename
+#from werkzeug.utils import secure_filename
 from flask import Flask, flash, request, redirect, url_for, session
-from flask_cors import CORS, cross_origin
+#from flask_cors import CORS, cross_origin
 from flask_restful import Api, Resource, reqparse
 from flask_sqlalchemy import SQLAlchemy
-import logging
+#import logging
 
-logging.basicConfig(level=logging.INFO)
+# logging.basicConfig(level=logging.INFO)
 
-logger = logging.getLogger('HELLO WORLD')
+# logger = logging.getLogger('HELLO WORLD')
 
 class Post(Resource):
     def __init__(self, user="", description="", is_video=False, file=None, post_time=None, data_dict=None):
@@ -109,70 +109,35 @@ class Database(Resource):
         self.data[post.user].add_post(post)
 
 class SocialNet(Resource):
-    loggedIn = return_login_status('LoginStatus') # Get this value from the databse
-    current_user_name = return_current_user('LoginStatus') # Get current user name
-    # def getLogin(self):
-    #     #get from database the login status
-
-    UPLOAD_FOLDER = '/path/to/the/uploads'
-    ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-
-    app = Flask(__name__)
-    app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-    #@app.route('/upload', methods=['POST'])
-    def fileUpload():
-        target=os.path.join(UPLOAD_FOLDER,'test_docs')
-        if not os.path.isdir(target):
-            os.mkdir(target)
-        logger.info("welcome to upload`")
-        file = request.files['file'] 
-        filename = secure_filename(file.filename)
-        destination="/".join([target, filename])
-        file.save(destination)
-        session['uploadFilePath']=destination
-        response="Whatever you wish too return"
-        return response
-
-    if __name__ == "__main__":
-        app.secret_key = os.urandom(24)
-        app.run(debug=True,host="0.0.0.0",use_reloader=False)
-
-    CORS(app, expose_headers='Authorization')
+    # To do - set it so that multiple posts by the same users can exist in the Feed table
+    loggedIn = return_login_status('LoginStatus')
+    current_user_name = return_current_user('LoginStatus')
 
     def get(self):
-        # return {
-        # 'resultStatus': 'SUCCESS',
-        # 'message': "In Python"
-        # }
         getLogin = return_login_status('LoginStatus')
-        if (getLogin):# Check with the database to see if the user is logged in
+        if (getLogin):
             return {'loginStatus': True}
         else:
             return {'loginStatus': False} 
 
     def post(self):
-        #print("Logged in: ", self.loggedIn)
         parser = reqparse.RequestParser()
         parser.add_argument('type', type=str)
         parser.add_argument('message', type=str)
 
         args = parser.parse_args()
 
-        #print(args)
-        # note, the post req from frontend needs to match the strings here (e.g. 'type and 'message')
-
         request_type = args['type']
         request_json = args['message']
-        # ret_status, ret_msg = ReturnData(request_type, request_json)
-        # currently just returning the req straight
         ret_status = request_type
         if (request_json is None):
             ret_msg = ""
-        else:
-            ret_msg = request_json.split('.') #split string by period
+        else: 
+            if request_type != "newTextPost" and request_type != "newImagePost":
+                ret_msg = request_json.split('.')
+            else:
+                ret_msg = request_json
         message = "No message"
-        # current_user_name = ''
         posts = []
         users = []
 
@@ -185,12 +150,8 @@ class SocialNet(Resource):
                 message = "No existing user found"
             else:
                 pswd = result[0].Password
-                if ret_msg[1] == pswd:# Check with the database for valid login
-                # ret_msg is a string in the format of "username"."password"
-                # so, you need to check the string before the period and after the period and return "ValidCombo" 
-                # if the databse says that they are a valid combination
+                if ret_msg[1] == pswd:
                     current_user_name = result[0].Username
-                    # updt = update_login_status('Accounts', current_user_name, True) #update login status to true
                     update_login_status('LoginStatus', False, True)
                     update_user_name('LoginStatus', True, current_user_name)
                     message = "ValidCombo"
@@ -199,26 +160,24 @@ class SocialNet(Resource):
 
         if request_type == "checkUniqueUsername": 
             result = search_username('Accounts', ret_msg[0])
-            if len(result) == 0: # Check with the database
+            if len(result) == 0;
                 message = "unique"
             else:
                 message = "not unique"
                 
         if request_type == "checkValidPassword":
-            if ret_msg[0] ==  ret_msg[1]: # Check with the database
-                # ret_msg is a string in the format of "password"."passwordConfirm"
-                # so, you need to check the string before the period and after the period and return "match" if they match
+            if ret_msg[0] ==  ret_msg[1]:
                 message = "match"
             else:
                 message = "no match"
         
-        if request_type == "newAccountCreated": #created and logged in at the same time
-            Foo1 = meta.tables['Accounts'] #add accounts row
+        if request_type == "newAccountCreated":
+            Foo1 = meta.tables['Accounts']
             ins1 = Foo1.insert({'Username':ret_msg[0], 'Password':ret_msg[1]})
             conn.execute(ins1)
             print("SETTING NEW USER")
             
-            Foo2 = meta.tables['Profile'] #add profile row
+            Foo2 = meta.tables['Profile']
             ins2 = Foo2.insert({'Username':ret_msg[0]})
             conn.execute(ins2)
             
@@ -256,10 +215,9 @@ class SocialNet(Resource):
             post = []
             if (lst_following is not None):
                 for koi in lst_following.split():
-                    result = search_username('Feed', koi) #ret_msg is the followed user
-                    post = [r.Text for r in result] # Check with the backend for all text posts
+                    result = search_username('Feed', koi) 
+                    post = [r.Text for r in result]
                     posts += post
-            #return post
             
         if request_type == "getFollowingImagePosts":
             current_user_name = return_current_user('LoginStatus')
@@ -267,34 +225,35 @@ class SocialNet(Resource):
             post = []
             if (lst_following is not None):
                 for koi in lst_following.split('\t'):
-                    result = search_username('Feed', koi) #ret_msg is the followed user
-                    post = [r.Images for r in result] # Check with the backend for all text posts
+                    result = search_username('Feed', koi) 
+                    post = [r.Images for r in result] 
                     posts += str(post)
-            #return post 
+            # set posts to an array of urls
+            # currently, this returns an array of all the characters in the url
 
         if request_type == "getMyTextPosts":
             current_user_name = return_current_user('LoginStatus')
-            result = search_username('Feed', current_user_name) #ret_msg is my username
+            result = search_username('Feed', current_user_name) 
             posts = [r.Text for r in result]
             
         if request_type == "getMyImagePosts":
             current_user_name = return_current_user('LoginStatus')
-            result = search_username('Feed', current_user_name) #ret_msg is my username
+            result = search_username('Feed', current_user_name) 
             posts = [r.Images for r in result] 
             
         if request_type == "newImagePost":
             current_user_name = return_current_user('LoginStatus')
-            print("Image: ", ret_msg[0])
+            print("Image: ", ret_msg)
             Foo = meta.tables['Feed']
-            ins = Foo.insert({'Username':current_user_name, 'Images':str(ret_msg[0])})
+            ins = Foo.insert({'Username':current_user_name, 'Images':str(ret_msg)})
             conn.execute(ins)
-            message = "new image post added"
+            message = ("new image post at " + ret_msg)
         
         if request_type == "newTextPost":
             current_user_name = return_current_user('LoginStatus')
             
             Foo = meta.tables['Feed']
-            ins = Foo.insert({'Username':current_user_name, 'Text':ret_msg[0]})
+            ins = Foo.insert({'Username':current_user_name, 'Text':ret_msg})
             conn.execute(ins)
             message = "new text post added"
         
@@ -303,12 +262,9 @@ class SocialNet(Resource):
             st = select(table.c.Username)
             users = [r[0] for r in conn.execute(st)]
             message = "get user list"
-            # Get an array of all users from the database
         
         if request_type == "follow":
             current_user_name = return_current_user('LoginStatus')
-            # send to databse code
-            #ret_msg[0] is the username, ret_msg[2] is the one the user follows
             lst_following = return_entry('Accounts', current_user_name, 'Followed')[0]
             if (lst_following and (ret_msg[0] not in lst_following.split('\t'))):
                 updt1 = update_entry('Profile', current_user_name, 'Followed', lst_following+'\t'+ret_msg[0])
@@ -319,15 +275,10 @@ class SocialNet(Resource):
                 updt1 = update_entry('Profile', current_user_name, 'Followed', ret_msg[0])
                 updt2 = update_entry('Accounts', current_user_name, 'Followed', ret_msg[0])
             message = ret_msg[0]
-            
-            # Store the ret_msg in the database as someone the user follows
          
         if request_type == "logOut":
             update_login_status('LoginStatus', True, False)
             message = "logged out"
-
-        # if ret_msg:
-        #     message = "Your message: {}".format(ret_msg)
 
         final_ret = {"status": "Success", "message": message, "arr": posts, "users": users}
 

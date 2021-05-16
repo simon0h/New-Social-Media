@@ -3,17 +3,6 @@ import PropTypes from "prop-types";
 import "./AccountManagement.css";
 import axios from "axios";
 
-// async function loginUser(credentials) {
-//   return fetch("http://localhost:8080/login", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json"
-//     },
-//     body: JSON.stringify(credentials)
-//  })
-//   .then(data => data.json())
-// }
-
 export default function Login({setToken}) {
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
@@ -33,10 +22,6 @@ export default function Login({setToken}) {
     }).catch(error => {
       console.log(error.response)
     })
-    // if (loggedIn) {
-    //   console.log("in if");
-    //   setToken(true);
-    // }
   }
 
   return (

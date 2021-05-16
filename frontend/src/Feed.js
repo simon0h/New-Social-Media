@@ -14,10 +14,40 @@ export default class Feed extends Component {
     this.allImgPosts = this.allImgPosts.bind(this);
     this.uploadFiles = this.uploadFiles.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.requestAlbum = this.requestAlbum.bind(this);
+  }
+
+  requestAlbum() {
+    var api_key = "9342dce25ceebef";
+    var request_url = "https://api.imgur.com/3/image/qfx4GBy";
+    var req = new XMLHttpRequest();
+    var that = this;
+    
+    req.onreadystatechange = function() { 
+       if (req.readyState === 4 && req.status === 200) {
+         if (req.responseText === "Not found") {
+            console.log("Imgur album not found.");
+          } 
+          else {
+            var json = JSON.parse(req.responseText);    // You got your response back!
+            console.log("Imgur JSON - ", json);
+            console.log("Imgur link - ", json.data.link);
+            that.setState({link: json.data.link});
+          }
+       } 
+       else {
+         console.log("Error with Imgur Request.");
+       }
+    }  
+    req.open("GET", request_url, true); // true for asynchronous     
+    req.setRequestHeader("Authorization", "Client-ID " + api_key);
+    req.send(null);
   }
 
   componentDidMount = () => {
     //e.preventDefault();
+    //this.requestAlbum();
+    
     if (this.props.username === undefined) {
       console.log("Feed - undefined username");
     }
@@ -39,25 +69,42 @@ export default class Feed extends Component {
   uploadMultipleFiles(e) {
     this.fileObj.push(e.target.files);
     for (let i = 0; i < this.fileObj[0].length; i++) {
-        //console.log("1", this.fileObj[0]);
-        //console.log("2", this.fileObj[0][i]);
+        var url;
+        // console.log("2", this.fileObj[0][i]);
         this.fileArray.push(URL.createObjectURL(this.fileObj[0][i]));
+        const formdata = new FormData()
+        formdata.append("image", this.fileObj[0][i]);
+        fetch("https://api.imgur.com/3/image/", {
+            method: "post",
+            headers: {
+                Authorization: "Client-ID 9342dce25ceebef"
+            },
+            body: formdata
+        }).then(data => data.json()).then(data => {
+            url = data.data.link;
+            console.log(url);
+            axios.post("http://localhost:5000/flask/hello", {type: "newImagePost", message: url})
+              .then(response => {
+                console.log("Feed - Backend: new image posts - ", response.data.message);
+              })
+        })
     }
-    //console.log("3", this.fileArray);
-    for (let i = 0; i < this.fileArray.length; i++) {
-      axios.post("http://localhost:5000/flask/hello", {type: "newImagePost", message: this.fileArray[i]})
-        .then(response => {
-          console.log("Feed - Backend: new image post - ", response.data.message);
-      })
-    }
+
+    //Todo 
+    // change feed so multiple posts can go on it 
+    // 
+
+
     this.setState({file: this.fileArray});
   }
 
   allImgPosts() {
     let imgObj = [];
     imgObj.push(this.state.imgPosts);
+    //imgObj.push(this.fileArray);
+    console.log("imgObj: ", imgObj);
     return (
-      (imgObj|| []).map(url => <img src={url} className="multipleImages" alt="Image placeholder" key={url}/>)
+      (imgObj|| []).map(url => <img src={url} className="multipleImages" alt="" key={url}/>)
     )
   }
 
@@ -132,7 +179,7 @@ export default class Feed extends Component {
         {postImageButton}
         {postTextButton}
         {allTextPosts}
-        <ImageUploader />
+        {/* <ImageUploader /> */}
         <div className="multipleImages">
           {this.allImgPosts()}
         </div>

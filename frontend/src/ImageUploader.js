@@ -30,19 +30,34 @@ class ImageUploader extends React.Component {
 
   render() {
     return (
-      <form onSubmit={this.handleUploadImage}>
-        <div>
-          <input ref={(ref) => { this.uploadInput = ref; }} type="file" />
-        </div>
-        <div>
-          <input ref={(ref) => { this.fileName = ref; }} type="text" placeholder="Enter the desired name of file" />
-        </div>
+      <React.Fragment>
         <br />
-        <div>
-          <button>Upload</button>
-        </div>
-        <img src={this.state.imageURL} alt="img" />
-      </form>
+        <input type="file" id="file"/>
+        <br />
+        <strong>
+            <p id="url"></p>
+        </strong>
+
+        {/* { */}
+        {/*     const file = document.getElementById("file") */}
+        {/*     const img = document.getElementById("img") */}
+        {/*     const url = document.getElementById("url") */}
+        {/*     file.addEventListener("change", ev => { */}
+        {/*         const formdata = new FormData() */}
+        {/*         formdata.append("image", ev.target.files[0]) */}
+        {/*         fetch("https://api.imgur.com/3/image/", { */}
+        {/*             method: "post", */}
+        {/*             headers: { */}
+        {/*                 Authorization: "Client-ID 9342dce25ceebef" */}
+        {/*             }, */}
+        {/*             body: formdata */}
+        {/*         }).then(data => data.json()).then(data => { */}
+        {/*             img.src = data.data.link */}
+        {/*             url.innerText = data.data.link */}
+        {/*         }) */}
+        {/*     }) */}
+        {/* } */}
+      </React.Fragment>
     );
   }
 }
