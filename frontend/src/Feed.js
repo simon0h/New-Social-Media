@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import "./App.css";
-import ImageUploader from "./ImageUploader";
 import axios from "axios";
 
 export default class Feed extends Component {
@@ -12,7 +11,7 @@ export default class Feed extends Component {
     this.state = {file: [null], post: false, textPosts: [], imgPosts: []};
     this.uploadMultipleFiles = this.uploadMultipleFiles.bind(this);
     this.allImgPosts = this.allImgPosts.bind(this);
-    this.uploadFiles = this.uploadFiles.bind(this);
+    //this.uploadFiles = this.uploadFiles.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.requestAlbum = this.requestAlbum.bind(this);
   }

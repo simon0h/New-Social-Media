@@ -160,7 +160,7 @@ class SocialNet(Resource):
 
         if request_type == "checkUniqueUsername": 
             result = search_username('Accounts', ret_msg[0])
-            if len(result) == 0;
+            if len(result) == 0:
                 message = "unique"
             else:
                 message = "not unique"
