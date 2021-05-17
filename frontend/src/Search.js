@@ -9,28 +9,6 @@ export default class Search extends Component {
     super(props);
     this.state = {data: []};
   }
-  // data = [
-  //   {
-  //     key: "john",
-  //     value: "John Doe",
-  //   },
-  //   {
-  //     key: "jane",
-  //     value: "Jane Doe",
-  //   },
-  //   {
-  //     key: "mary",
-  //     value: "Mary Phillips",
-  //   },
-  //   {
-  //     key: "robert",
-  //     value: "Robert",
-  //   },
-  //   {
-  //     key: "karius",
-  //     value: "Karius",
-  //   },
-  // ]
 
   setKeys(item) {
     var ar = {"key": item, "value": item};
@@ -45,20 +23,15 @@ export default class Search extends Component {
       })
   }
 
-  componentDidMount = () => {
-    // event.preventDefault();
-    // let users = [];
-    //let usersWithKey;
-    axios.post("http://localhost:5000/flask/hello", {type: "getUsers"})
+  componentDidMount = () => { //When the page is first loaded, this function is called
+    axios.post("http://localhost:5000/flask/hello", {type: "getUsers"}) //Sends a post request to backend requesting for array of all users
       .then(response => {
         console.log("Backend: users - ", response.data.message);
-        const users = response.data.users;
+        const users = response.data.users; //Recieves an array of all users from the backend
         const usersWithKey = users.map(this.setKeys);
         this.setState({data: usersWithKey});
         console.log("Search - Backend: users - ", users);
       })
-    // const usersWithKey = users.map(this.setKeys);
-    // console.log("Key: ", usersWithKey);
   }
 
   render () {
@@ -69,9 +42,7 @@ export default class Search extends Component {
         <ReactSearchBox
           data={this.state.data}
           callback={record => console.log(record)}
-          //onChange={value => console.log(value)}
           onSelect={record => this.follow(record)}
-
         />
       </React.Fragment>
     );

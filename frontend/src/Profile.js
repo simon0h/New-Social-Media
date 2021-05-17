@@ -6,31 +6,39 @@ import axios from "axios"
 export default class Profile extends Component {
   constructor(props) {
     super(props);
-    this.state = {backgroundColor: "white", customize: false, font: "Poppins", posts: []};
+    this.state = {backgroundColor: "white", customize: false, font: "Poppins", textPosts: [], imgPosts: []};
     this.handleFontChange = this.handleFontChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.allImgPosts = this.allImgPosts.bind(this);
   }
 
   componentDidMount = () => {
-    axios.post("http://localhost:5000/flask/hello", {type: "getMyTextPosts"})
+    axios.post("http://localhost:5000/flask/hello", {type: "getMyTextPosts"}) //Sends a post request to backend requesting for array of all text posts by me
       .then(response => {
-        this.setState({posts: response.data.arr})
-        console.log("Profile - Backend: my text posts - ", this.state.posts);
+        this.setState({textPosts: response.data.arr})
+        console.log("Profile - Backend: my text posts - ", this.state.textPosts);
+        let newTextPosts = [];
+        let size = this.state.textPosts.length;
+        for (var i = 0; i < size; i++) {
+          if (this.state.textPosts[i] !== null) {
+            newTextPosts.push(this.state.textPosts[i]);
+          }
+        }
+        this.setState({textPosts: newTextPosts});
       })
-    axios.post("http://localhost:5000/flask/hello", {type: "getMyImagePosts", message: this.props.username})
+    axios.post("http://localhost:5000/flask/hello", {type: "getMyImagePosts", message: this.props.username}) //Sends a post request to backend requesting for array of all image posts by me
         .then(response => {
           this.setState({imgPosts: response.data.arr})
           console.log("Profile - Backend: my image posts - ", this.state.imgPosts);
         })
-    axios.post("http://localhost:5000/flask/hello", {type: "getMyColor"})
+    axios.post("http://localhost:5000/flask/hello", {type: "getMyColor"}) //Sends a post request to backend requesting for my color
       .then(response => {
         if (response.data.message !== null) {
           this.setState({backgroundColor: response.data.message})
           console.log("Profile - Backend: my color - ", this.state.backgroundColor);
         }
       })
-    axios.post("http://localhost:5000/flask/hello", {type: "getMyFont"})
+    axios.post("http://localhost:5000/flask/hello", {type: "getMyFont"}) //Sends a post request to backend requesting for my font
       .then(response => {
         if (response.data.message !== "No message") {
           this.setState({font: response.data.message})
@@ -40,7 +48,6 @@ export default class Profile extends Component {
   }
 
   logOut = () => {
-    //event.preventDefault();
     axios.post("http://localhost:5000/flask/hello", {type: "logOut"})
       .then(response => {
         this.props.logout();
@@ -72,7 +79,6 @@ export default class Profile extends Component {
   };
 
   handleFontChange(event) {
-    // console.log(event.target.font)
     this.setState({font: event.target.value});
     axios.post("http://localhost:5000/flask/hello", {type: "setMyFont", message: event.target.value})
       .then(response => {
@@ -86,21 +92,28 @@ export default class Profile extends Component {
   }
 
   allImgPosts() {
-    let imgObj = [];
-    imgObj.push(this.state.imgPosts);
+    let newImgPosts = [];
+    let size = this.state.imgPosts.length;
+    for (var i = 0; i < size; i++) {
+      if (this.state.imgPosts[i] !== null) {
+        newImgPosts.push(this.state.imgPosts[i]);
+        console.log(this.state.imgPosts[i]);
+      }
+    }
+    console.log(newImgPosts);
     return (
-      (imgObj|| []).map(url => <img src={url} className="multipleImages" alt="Image placeholder" key={url}/>)
+      (newImgPosts|| []).map(url => <img src={url} className="multipleImages" alt="" key={url}/>)
     )
   }
 
   render () {
     var customize = this.state.customize;
-    let allPosts = this.state.posts;
+    let textPosts = this.state.textPosts;
     let customizeButton;
     let colorPicker;
     let fontPicker;
     let logOut;
-    let allTextPosts = allPosts.map((p) => <div className="posts">{p}</div>);
+    let allTextPosts = textPosts.map((p) => <div className="posts">{p}</div>);
 
     var mystyle = {
       backgroundColor: this.state.backgroundColor,
@@ -143,7 +156,6 @@ export default class Profile extends Component {
                 <option value="Times New Roman" style={{fontFamily: "Times New Roman"}}>Times New Roman</option>
               </select>
             </label>
-            {/* <input type="submit" value="Submit" style={{borderRadius: "8px", fontFamily: "Poppins", fontSize: "15px", marginLeft: "15px"}}/> */}
           </form>
         </div>
       );
@@ -153,7 +165,7 @@ export default class Profile extends Component {
         <div style={mystyle}>
           <title>Profile</title>
           <h2>Profile</h2>
-          <h2>Profile - Hello {this.props.username}</h2>
+          <h2>Hello {this.props.username}</h2>
           {customizeButton}
           {colorPicker}
           {fontPicker}
