@@ -53,11 +53,11 @@ export default class App extends PureComponent {
           <body>
             <title>Home</title>
             <header className="newSocialMedia">New Social Media</header>
-            <p className="navigation">
-              <li><a href="/feed">Feed</a></li>
-              <li><a href="/search">Search</a></li>
-              <li><a href="/profile">Profile</a></li>
-            </p>
+            <div className="navigation">
+              <li><a href="/feed"><i class="fas fa-stream"></i>  Feed</a></li>
+              <li><a href="/search"><i class="fas fa-search"></i>  Search</a></li>
+              <li><a href="/profile"><i class="fas fa-user-circle"></i>  Profile</a></li>
+            </div>
             <BrowserRouter>
               <Switch>
                 <Route path="/Feed">

@@ -1,40 +1,48 @@
 h1 {
-  	color: white;
-  	font-size: 40px;
-  	text-align: center;
+	color: white;
+	font-size: 40px;
+	text-align: center;
 }
 
-.accountWrapper {
-	background-color: #696969;
-	border-radius: 14px;
-  	margin: auto;
-  	padding: 25px;
-  	font-size: 20px;
-  	text-align: center;
-  	width: 600px;
-}
-
-.login {
+button[type=accountManagement] {
   background-color: #708090;
+  border: none;
   border-radius: 10px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
   color: white;
-  display: inline-block;
+  cursor: pointer;
+  float: left;
   font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 50px;
-  padding-top: 23px;
-  padding-bottom: 20px;
-  padding-right: 20px;
-  padding-left: 20px;
-  width: 300px;
+  margin-top: 18px;
+  margin-right: 18px;
+  padding: 20px 20px;
+  text-align: center;
+  width: 250px;
 }
 
-.prompt {
-  	color: white;
-  	font-size: 20px;
-  	margin-top: 18px;
-  	margin-bottom: 7px;
-  	text-align: center;
+button[type=accountManagement]:hover {
+  background: #4682B4;
+  color: white;
+}
+
+button[type=submit] {
+  background-color: #708090;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  justify-content: center;
+  margin-top: 18px;
+  padding: 20px 20px;
+  text-align: center;
+  width: 250px;
+}
+
+button[type=submit]:hover {
+  background: #4682B4;
+  color: white;
 }
 
 input[type=text] {
@@ -57,22 +65,35 @@ input[type=password] {
   width: 250px;
 }
 
-button[type=submit] {
-  background-color: #708090;
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
-  color: white;
-  cursor: pointer;
+.accountWrapper {
+  background-color: #696969;
+	border-radius: 14px;
   font-size: 20px;
-  justify-content: center;
-  margin-top: 18px;
-  padding: 20px 20px;
+  margin: auto;
+  padding: 25px;
   text-align: center;
-  width: 250px;
+  width: 600px;
 }
 
-button[type=submit]:hover {
-  background: #4682B4;
+.login {
+  background-color: #708090;
+  border-radius: 10px;
   color: white;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 50px;
+  padding-top: 23px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
+  width: 300px;
+}
+
+.prompt {
+	color: white;
+	font-size: 20px;
+	margin-top: 18px;
+	margin-bottom: 7px;
+	text-align: center;
 }

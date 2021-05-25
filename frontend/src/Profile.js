@@ -102,7 +102,7 @@ export default class Profile extends Component {
     }
     console.log(newImgPosts);
     return (
-      (newImgPosts|| []).map(url => <img src={url} className="multipleImages" alt="" key={url}/>)
+      (newImgPosts|| []).map(url => <img src={url} className="imagePosts" alt="" key={url}/>)
     )
   }
 
@@ -113,11 +113,14 @@ export default class Profile extends Component {
     let colorPicker;
     let fontPicker;
     let logOut;
-    let allTextPosts = textPosts.map((p) => <div className="posts">{p}</div>);
+    let allTextPosts = textPosts.map((p) => <div className="textPosts">{p}</div>);
 
     var mystyle = {
       backgroundColor: this.state.backgroundColor,
-      paddingBottom: "55%"
+      borderRadius: "10px",
+      marginLeft: "10%",
+      paddingBottom: "15%",
+      width: "80%"
     };
 
     var fontChoice = {
@@ -126,7 +129,7 @@ export default class Profile extends Component {
     };
 
     logOut = (
-      <button type="customize" onClick={this.logOut}>Log out</button>);
+      <button type="logOut" onClick={this.logOut}>Log out</button>);
 
     if (!customize) {
       customizeButton = <button type="customize" onClick={this.CustomizeOn}>Customize</button>;
@@ -136,7 +139,7 @@ export default class Profile extends Component {
     else {
       customizeButton = <button type="customize" onClick={this.CustomizeOff}>Done</button>;
       colorPicker = (
-        <div className="picker">
+        <div className="colorPicker">
           <SketchPicker
             color={this.state.backgroundColor}
             onChangeComplete={this.handleChangeComplete}
@@ -147,8 +150,7 @@ export default class Profile extends Component {
         <div className="fontPicker">
           <form onSubmit={this.handleSubmit}>
             <label>
-              Pick a font:
-              <select value={this.state.font} onChange={this.handleFontChange} style={{marginLeft: "20px", fontSize: "18px"}}>
+              <select value={this.state.font} onChange={this.handleFontChange} style={{fontSize: "14px", paddingTop: "5px", paddingBottom: "5px"}}>
                 <option value="Arial" style={{fontFamily: "Arial"}}>Arial</option>
                 <option value="Brush Script MT" style={{fontFamily: "Brush Script MT"}}>Brush Script MT</option>
                 <option value="Courier New" style={{fontFamily: "Courier New"}}>Courier New</option>
@@ -164,18 +166,16 @@ export default class Profile extends Component {
       <React.Fragment>
         <div style={mystyle}>
           <title>Profile</title>
-          <h2>Profile</h2>
-          <h2>Hello {this.props.username}</h2>
+          <div style={{marginTop: "10px"}}></div>
           {customizeButton}
+          <div className="userGreeting">Hello {this.props.username}</div>
           {colorPicker}
           {fontPicker}
-          {logOut}
           <div style={fontChoice}>
             {allTextPosts}
           </div>
-          <div className = "multipleImages">
-            {this.allImgPosts()}
-          </div>
+          {this.allImgPosts()}
+          {logOut}
         </div>
       </React.Fragment>
     )

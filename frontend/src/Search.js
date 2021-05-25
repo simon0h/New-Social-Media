@@ -38,12 +38,15 @@ export default class Search extends Component {
     return (
       <React.Fragment>
         <title>Search</title>
-        <h2>Search</h2>
-        <ReactSearchBox
-          data={this.state.data}
-          callback={record => console.log(record)}
-          onSelect={record => this.follow(record)}
-        />
+        <div className="searchBox">
+          <ReactSearchBox
+            placeholder="Search for users"
+            data={this.state.data}
+            callback={record => console.log(record)}
+            onSelect={record => this.follow(record)}
+            width="400px"
+          />
+        </div>
       </React.Fragment>
     );
   }

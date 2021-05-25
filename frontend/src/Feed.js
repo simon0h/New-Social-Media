@@ -118,7 +118,7 @@ export default class Feed extends Component {
     }
     console.log(newImgPosts);
     return (
-      (newImgPosts|| []).map(url => <img src={url} className="multipleImages" alt="" key={url}/>)
+      (newImgPosts|| []).map(url => <img src={url} className="imagePosts" alt="" key={url}/>)
     )
   }
 
@@ -142,22 +142,28 @@ export default class Feed extends Component {
     var post = this.state.post;
     var textPosts = this.state.textPosts;
     let postButton;
-    let postImageButton;
-    let postTextButton;
-    let allTextPosts = textPosts.map((p) => <div className="posts">{p}</div>);
+    let postImage;
+    let followingImages;
+    let postText;
+    let allTextPosts = textPosts.map((p) => <div className="textPosts">{p}</div>);
     if (!post) {
       postButton = <button type="post" onClick={this.PostOn}>Post</button>;
-      postImageButton = <div></div>;
-      postTextButton = <div></div>;
+      postImage = <div></div>;
+      followingImages = <div></div>;
+      postText = <div></div>;
     }
     else {
       postButton = <button type="post" onClick={this.PostOff}>Done</button>;
-      postImageButton = (
+      postImage = (
         <form>
-          <div className="upload">
+          <div className="postImage">
             <input type="file" onChange={this.uploadMultipleFiles} multiple/>
           </div>
-          <div className="multipleImages">
+        </form>
+      )
+      if (this.fileArray.length > 0) {
+        followingImages = (
+          <div className="imagePosts">
             {(this.fileArray || []).map(url => (
               <img src={url} alt="..." style={{
                 borderRadius:"10px",
@@ -168,26 +174,31 @@ export default class Feed extends Component {
                 width:"500px"}}/>
             ))}
           </div>
-        </form>
-      )
-      postTextButton = (
+        )
+      }
+      else {
+        followingImages = <div></div>;
+      }
+      postText = (
         <form onSubmit={this.handleSubmit}>
-          <label>
-            <div className="textPost">Text post:</div>
-            <input type="text" onChange={e => this.setState({myTextPost: e.target.value})}/>
-          </label>
-          <input type="submit" value="Submit"/>
+          <div className = "postText">
+            <input type="text" placeholder="Hello!" onChange={e => this.setState({myTextPost: e.target.value})}/>
+            <input type="submit" value="Submit"/>
+          </div>
         </form>
       )
     }
 
     return (
       <React.Fragment>
+        <title>Feed</title>
+        <div className="postsHeader">Following Posts</div>
         {postButton}
-        {postImageButton}
-        {postTextButton}
+        {postImage}
+        {followingImages}
+        {postText}
         {allTextPosts}
-        <div className="multipleImages">
+        <div className="imagePosts">
           {this.allImgPosts()}
         </div>
       </React.Fragment>
