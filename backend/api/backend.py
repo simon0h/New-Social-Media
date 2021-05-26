@@ -10,7 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 class backend(Resource):
     #loggedIn = return_login_status('LoginStatus')
-    loggedIn = True
+    loggedIn = True # currently hard coded to true for testing purposes
     current_user_name = return_current_user('LoginStatus')
 
     def get(self):
