@@ -8,5 +8,5 @@ An Instagram-like webapp that allows users to post images and text posts, follow
 I built the frontend, and my teammates built the backend and database components.
 
 ## **Technologies used**
-# Frontend - ReactJS, Axios, Imgur (to host the images)
-# Backend - Python
+* Frontend - ReactJS, Axios, Imgur (to host the images)
+* Backend - Python
